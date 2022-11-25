@@ -34,6 +34,17 @@
     right: -4px;
 }
 
+/* tooltip reload */
+.tooltip-excel {
+    right: 0;
+    width: 120px;
+    top: 150%;
+}
+.tooltip-excel label div {
+    top: -5px;
+    right: -102px;
+}
+
 /* Tooltip Số CMND */
 .tooltip__so-cmnd {
     width: 190px;

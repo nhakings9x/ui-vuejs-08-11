@@ -8,8 +8,10 @@
             :listEmployee="listEmployee"
             :reloadList="getListPageOne"
             :hadData="hadData"
+            :errorTextApi="errorTextApi"
             @searchValue="searchValue"
             @reloadData="getListPageOne"
+            @openToastAdd="closeOpenToast"
         ></main-content>
         <pagging-content
             :totalRecord="totalRecord"
@@ -55,6 +57,7 @@ export default {
             search: "",
             toastStatus: false,
             hadData: false,
+            errorTextApi: "",
         };
     },
     watch: {
@@ -81,21 +84,8 @@ export default {
         search() {
             this.getListPageOne();
         },
-        // isLoading() {
-        //     if (this.isLoading == true) {
-        //         setTimeout(() => {
-        //             this.isLoading == false;
-        //         }, 2000);
-        //     }
-        // },
     },
-    updated() {
-        // if (this.isLoading == true) {
-        //     setTimeout(() => {
-        //         this.isLoading == false;
-        //     }, 2000);
-        // }
-    },
+    updated() {},
     created() {
         // Thực hiện lấy dữ liệu bắt đầu trang
         this.getList();
@@ -108,24 +98,25 @@ export default {
          * author: NHAnh(26/10/2022)
          */
         async getList() {
+            debugger;
             // Bật loading
             this.isLoading = true;
-
+            this.hadData = false;
+            this.errorTextApi = "";
             try {
                 const res = await axios.get(
-                    `${BASE_URL}/filter?pageSize=${this.numberItemData}&pageNumber=${this.pageNumberData}${this.search}`
+                    `${BASE_URL}/filter?${this.search}&limit=${this.numberItemData}&offset=${this.pageNumberData}`
                 );
                 if (res) {
                     // Lấy số bản ghi
-                    if (res.status == 204) {
-                        this.totalRecord = 0;
-                        this.hadData = true;
-                    } else {
-                        this.totalRecord = res.data.TotalRecord;
-                        this.hadData = false;
-                    }
-                    // Gán dữ liệu vào list
+                    this.totalRecord = res.data.TotalCount;
 
+                    if (this.totalRecord == 0) {
+                        this.hadData = true;
+                        this.errorTextApi = "Không có dữ liệu !!!";
+                    }
+                    console.log(res.data.Data);
+                    // Gán dữ liệu vào list
                     this.listEmployee = res.data.Data;
                     // Thêm trường checked cho từng ô dữ liệu
 
@@ -133,9 +124,6 @@ export default {
                     // Thêm giá trị đóng mở thanh chức năng
 
                     this.listEmployee.map(e => (e.closeOpenDelete = false));
-
-                    // Lấy số bản ghi
-                    this.totalRecord = res.data.TotalRecord;
 
                     // Lấy số trang
                     this.totalPage = res.data.TotalPage;
@@ -151,6 +139,8 @@ export default {
             } catch (error) {
                 this.isLoading = false;
                 console.log(error);
+                this.hadData = true;
+                this.errorTextApi = "Không tìm thấy dữ liệu !!!";
             }
         },
 
@@ -159,8 +149,12 @@ export default {
          * author: NHAnh (31/10/2022)
          */
         getListPageOne() {
-            this.pageNumberData = 1;
-            this.getList();
+            try {
+                this.pageNumberData = 1;
+                this.getList();
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -168,8 +162,12 @@ export default {
          * author: NHAnh(26/10/2022)
          */
         funNumberItem(data) {
-            this.pageNumberData = 1;
-            this.numberItemData = data;
+            try {
+                this.pageNumberData = 1;
+                this.numberItemData = data;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -177,10 +175,14 @@ export default {
          * author: NHAnh(30/10/2022)
          */
         searchValue(data) {
-            if (data) {
-                this.search = `&employeeFilter=${data}`;
-            } else {
-                this.search = "";
+            try {
+                if (data) {
+                    this.search = `&keyword=${data}`;
+                } else {
+                    this.search = "";
+                }
+            } catch (err) {
+                console.log(err);
             }
         },
         /**
@@ -188,19 +190,45 @@ export default {
          * author: NHAnh(26/10/2022)
          */
         funNextPage(data) {
-            this.pageNumberData = data;
+            try {
+                this.pageNumberData = data;
+            } catch (err) {
+                console.log(err);
+            }
         },
         funDownPage(data) {
-            this.pageNumberData = data;
+            try {
+                this.pageNumberData = data;
+            } catch (err) {
+                console.log(err);
+            }
         },
+
+        /**
+         * Mở toast thêm
+         * author: NHAnh(26/10/2022)
+         */
         openToastAdd(data) {
-            this.toastStatus = data;
-            setTimeout(() => {
-                this.toastStatus = false;
-            }, 4000);
+            try {
+                this.toastStatus = data;
+                setTimeout(() => {
+                    this.toastStatus = false;
+                }, 4000);
+            } catch (err) {
+                console.log(err);
+            }
         },
+
+        /**
+         * Đóng toast thêm
+         * author: NHAnh(26/10/2022)
+         */
         closeOpenToast() {
-            this.toastStatus = !this.toastStatus;
+            try {
+                this.toastStatus = !this.toastStatus;
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };

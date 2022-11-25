@@ -36,8 +36,12 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         isEditEmployee() {
-            this.coDialogUpdate();
-            this.$emit("isUpdate");
+            try {
+                this.coDialogUpdate();
+                this.$emit("isUpdate");
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -45,9 +49,13 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         coDialogUpdate(value) {
-            this.$emit("coDialogUpdate");
-            if (value == 1) {
-                this.$emit("close-popup-edit");
+            try {
+                this.$emit("coDialogUpdate");
+                if (value == 1) {
+                    this.$emit("close-popup-edit");
+                }
+            } catch (err) {
+                console.log(err);
             }
         },
     },

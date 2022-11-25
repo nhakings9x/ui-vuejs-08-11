@@ -30,7 +30,11 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         closeOpenToast() {
-            this.$emit("closeOpenToast");
+            try {
+                this.$emit("closeOpenToast");
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };

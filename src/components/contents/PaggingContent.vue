@@ -80,40 +80,37 @@ export default {
         },
     },
     emits: ["pageNumber:pageNumber", "numberItem:numberItem"],
-    watch: {
-        // fisrtData() {
-        //     this.fisrtData = this.numberItem * (this.pageNumberData - 1) + 1;
-        // },
-        // lastData() {
-        //     this.lastData = this.pageNumberData = this.totalPage
-        //         ? this.numberItem * this.pageNumberData
-        //         : this.numberItem * this.pageNumberData -
-        //           (this.numberItem * this.pageNumberData - this.totalRecord);
-        // },
-    },
     methods: {
         /**
          * Tiến 1 trang
          * author: NHAnh (26/10/2022)
          */
         nextPage() {
-            this.pageNumber = this.pageNumberData;
-            if (this.pageNumber < this.totalPage) {
-                this.pageNumber++;
+            try {
+                this.pageNumber = this.pageNumberData;
+                if (this.pageNumber < this.totalPage) {
+                    this.pageNumber++;
+                }
+                this.$emit("nextPage", this.pageNumber);
+            } catch (err) {
+                console.log(err);
             }
-            this.$emit("nextPage", this.pageNumber);
         },
         /**
          * lùi 1 trang
          * author: NHAnh (26/10/2022)
          */
         downPage() {
-            this.pageNumber = this.pageNumberData;
+            try {
+                this.pageNumber = this.pageNumberData;
 
-            if (this.pageNumber > 1) {
-                this.pageNumber--;
+                if (this.pageNumber > 1) {
+                    this.pageNumber--;
+                }
+                this.$emit("downPage", this.pageNumber);
+            } catch (err) {
+                console.log(err);
             }
-            this.$emit("downPage", this.pageNumber);
         },
 
         /**
@@ -121,8 +118,12 @@ export default {
          * author: NHA (29/10/2022)
          */
         paggingNumber(data) {
-            this.numberItem = data;
-            this.$emit("number-item", this.numberItem);
+            try {
+                this.numberItem = data;
+                this.$emit("number-item", this.numberItem);
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };
@@ -135,7 +136,7 @@ export default {
     bottom: 0;
     margin-left: 16px;
     margin-right: 16px;
-    border-top: 1px solid #bbbbbb;
+    border-top: 1px solid #e6e6e6;
     display: flex;
     align-items: center;
     justify-content: space-between;

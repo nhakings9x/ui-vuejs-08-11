@@ -51,7 +51,11 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         openToastAdd(data) {
-            this.$emit("openToastAdd", data);
+            try {
+                this.$emit("openToastAdd", data);
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -59,10 +63,14 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         openToastEdit(data) {
-            this.toastStatus = data;
-            setTimeout(() => {
-                this.toastStatus = false;
-            }, 4000);
+            try {
+                this.toastStatus = data;
+                setTimeout(() => {
+                    this.toastStatus = false;
+                }, 4000);
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -70,7 +78,11 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         onClose() {
-            this.popupStatus = false;
+            try {
+                this.popupStatus = false;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -78,7 +90,11 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         closeOpenToast() {
-            this.toastStatus = !this.toastStatus;
+            try {
+                this.toastStatus = !this.toastStatus;
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };

@@ -1,6 +1,6 @@
 <template>
     <div class="form-group">
-        <label for=""
+        <label for="" :title="titleLable"
             >{{ labelForm }}
             <span class="color-red" v-if="required">*</span></label
         >
@@ -13,11 +13,16 @@
             @blur="blur"
             :autofocus="autofocus"
             :tabindex="tabindex"
+            :tabForcus="tabForcus"
         ></ms-input>
 
-        <label for="" class="error_text" v-if="validateForm || isValidate">{{
-            errorText || errorMsg
-        }}</label>
+        <label
+            for=""
+            class="error_text"
+            v-if="validateForm || isValidate"
+            :title="errorText || errorMsg"
+            >{{ errorText || errorMsg }}</label
+        >
     </div>
 </template>
 <script>
@@ -67,6 +72,13 @@ export default {
         tabindex: {
             type: Number,
         },
+        // title của lable
+        titleLable: {
+            type: String,
+        },
+        tabForcus: {
+            type: Boolean,
+        },
     },
     watch: {
         valueInput: {
@@ -83,11 +95,15 @@ export default {
          */
 
         inputValue(data) {
-            if (data) {
-                this.isValidate = false;
-                this.errorMsg = ``;
+            try {
+                if (data) {
+                    this.isValidate = false;
+                    this.errorMsg = ``;
+                }
+                this.$emit("dataInput", data);
+            } catch (err) {
+                console.log(err);
             }
-            this.$emit("dataInput", data);
         },
         /**
          * Validate 2 form bắt buộc nhập là Mã và Tên NV
@@ -95,14 +111,22 @@ export default {
          * author: NHAnh (06/11/2022)
          */
         blur(data) {
-            this.$emit("blur");
+            try {
+                this.$emit("blur");
+            } catch (err) {
+                console.log(err);
+            }
         },
         /**
          * Kiểm tra có phải là số không
          * Author: NHAnh(02/11/2022)
          */
         isNumber(value) {
-            return /^-?\d+$/.test(value);
+            try {
+                return /^-?\d+$/.test(value);
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };
@@ -115,9 +139,10 @@ export default {
 }
 .form-group label {
     padding-bottom: 8px;
-    font-weight: 700;
+    font-weight: 600;
 }
 .form-group .error_text {
+    font-size: 12px;
     position: absolute;
     top: calc(100% + 4px) !important;
     color: red;

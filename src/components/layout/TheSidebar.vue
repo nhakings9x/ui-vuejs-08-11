@@ -102,8 +102,12 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         openSidebar() {
-            this.updateSidebar = !this.updateSidebar;
-            this.eventBus.emit("openSidebar", this.updateSidebar);
+            try {
+                this.updateSidebar = !this.updateSidebar;
+                this.eventBus.emit("openSidebar", this.updateSidebar);
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };
@@ -123,10 +127,11 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    padding-left: 24px;
+    box-sizing: border-box;
 }
 .m-sidebar__header b {
-    padding-left: 4px;
+    padding-left: 8px;
     cursor: pointer;
 }
 

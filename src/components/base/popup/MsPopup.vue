@@ -61,7 +61,9 @@
                                         :errorText="errors.code"
                                         :valueInput="employee.EmployeeCode"
                                         :tabindex="1"
+                                        ref="input"
                                         :autofocus="true"
+                                        :tabForcus="tabForcus"
                                         @blur="validateFormCode"
                                     ></form-control>
                                 </div>
@@ -89,7 +91,7 @@
                                         :listDropdownItem="listDepartment"
                                         defaultValue="Chọn đơn vị"
                                         downData
-                                        :dpName="employee.DepartmentId"
+                                        :dpName="employee.DepartmentID"
                                         :tabindex="3"
                                         :validate="validate.DepartmentId"
                                         @dropdown-value="dpId"
@@ -101,6 +103,7 @@
                                         for=""
                                         class="error_text"
                                         v-if="validate.DepartmentId"
+                                        :title="errors.DepartmentId"
                                         >{{ errors.DepartmentId }}</label
                                     >
                                 </div>
@@ -110,13 +113,11 @@
                                     <form-control
                                         labelForm="Chức danh"
                                         @dataInput="dataForm"
-                                        :validateForm="
-                                            validate.employeePosition
-                                        "
-                                        :errorText="errors.employeePosition"
-                                        formControlName="EmployeePosition"
+                                        :validateForm="validate.JobPositionName"
+                                        :errorText="errors.JobPositionName"
+                                        formControlName="JobPositionName"
                                         :tabindex="4"
-                                        :valueInput="employee.EmployeePosition"
+                                        :valueInput="employee.JobPositionName"
                                     ></form-control>
                                 </div>
                             </div>
@@ -134,7 +135,7 @@
                                                 : '',
                                         ]"
                                         tabindex="5"
-                                        v-model="employee.DateOfBirth"
+                                        v-model="employee.DateofBirth"
                                         @blur="validateForm"
                                     />
                                     <label for="" class="error_text">{{
@@ -149,10 +150,10 @@
                                             type="radio"
                                             id="Nam"
                                             name="fav_language"
-                                            value="1"
+                                            :value="0"
                                             tabindex="6"
                                             v-model="employee.Gender"
-                                            :checked="employee?.Gender == 1"
+                                            :checked="employee?.Gender == 0"
                                         />
                                          
                                         <label
@@ -167,10 +168,10 @@
                                             type="radio"
                                             id="Nam"
                                             name="fav_language"
-                                            value="0"
+                                            :value="1"
                                             tabindex="7"
                                             v-model="employee.Gender"
-                                            :checked="employee?.Gender == 0"
+                                            :checked="employee?.Gender == 1"
                                         />
 
                                          
@@ -186,7 +187,7 @@
                                             type="radio"
                                             id="Nam"
                                             name="fav_language"
-                                            value="2"
+                                            :value="2"
                                             tabindex="8"
                                             v-model="employee.Gender"
                                             :checked="employee?.Gender == 2"
@@ -205,6 +206,7 @@
                                 <div class="so-cmnd">
                                     <form-control
                                         labelForm="Số CMND"
+                                        titleLable="Số chứng minh nhân dân"
                                         @dataInput="dataForm"
                                         :validateForm="validate.IdentityNumber"
                                         :errorText="errors.IdentityNumber"
@@ -248,10 +250,10 @@
                                 <form-control
                                     labelForm="Địa chỉ"
                                     @dataInput="dataForm"
-                                    formControlName="Address"
-                                    :validateForm="validate.Address"
-                                    :errorText="errors.Address"
-                                    :valueInput="employee.Address"
+                                    formControlName="Adress"
+                                    :validateForm="validate.Adress"
+                                    :errorText="errors.Adress"
+                                    :valueInput="employee.Adress"
                                     :tabindex="12"
                                 ></form-control>
                             </div>
@@ -260,6 +262,7 @@
                             <div class="di-dong">
                                 <form-control
                                     labelForm="ĐT di động"
+                                    titleLable="Điện thoại di động"
                                     @dataInput="dataForm"
                                     :validateForm="validate.PhoneNumber"
                                     :errorText="errors.PhoneNumber"
@@ -271,7 +274,8 @@
                             </div>
                             <div class="di-dong">
                                 <form-control
-                                    labelForm="Đt cố định"
+                                    labelForm="ĐT cố định"
+                                    titleLable="Điện thoại cố định"
                                     @dataInput="dataForm"
                                     :validateForm="validate.TelephoneNumber"
                                     :errorText="errors.TelephoneNumber"
@@ -299,10 +303,10 @@
                                 <form-control
                                     labelForm="Tài khoản ngân hàng"
                                     @dataInput="dataForm"
-                                    :validateForm="validate.BankAccountNumber"
-                                    :errorText="errors.BankAccountNumber"
-                                    formControlName="BankAccountNumber"
-                                    :valueInput="employee.BankAccountNumber"
+                                    :validateForm="validate.BankNumber"
+                                    :errorText="errors.BankNumber"
+                                    formControlName="BankNumber"
+                                    :valueInput="employee.BankNumber"
                                     @blur="validateForm"
                                     :tabindex="16"
                                 ></form-control>
@@ -311,10 +315,10 @@
                                 <form-control
                                     labelForm="Tên ngân hàng"
                                     @dataInput="dataForm"
-                                    :validateForm="validate.BankBranchName"
-                                    :errorText="errors.BankBranchName"
-                                    formControlName="BankBranchName"
-                                    :valueInput="employee.BankBranchName"
+                                    :validateForm="validate.BankName"
+                                    :errorText="errors.BankName"
+                                    formControlName="BankName"
+                                    :valueInput="employee.BankName"
                                     :tabindex="17"
                                 ></form-control>
                             </div>
@@ -322,10 +326,10 @@
                                 <form-control
                                     labelForm="Chi nhánh"
                                     @dataInput="dataForm"
-                                    :validateForm="validate.BankProvinceName"
-                                    :errorText="errors.BankProvinceName"
-                                    formControlName="BankProvinceName"
-                                    :valueInput="employee.BankProvinceName"
+                                    :validateForm="validate.BankBranch"
+                                    :errorText="errors.BankBranch"
+                                    formControlName="BankBranch"
+                                    :valueInput="employee.BankBranch"
                                     :tabindex="18"
                                 ></form-control>
                             </div>
@@ -337,7 +341,7 @@
                         btnText="Hủy"
                         btnExtra
                         @click="closePopup()"
-                        :tabindex="19"
+                        :tabindex="21"
                     ></ms-button>
                     <div class="m-popup__footer-left">
                         <ms-button
@@ -351,7 +355,7 @@
                             v-show="!edit"
                             btnText="Cất và thêm"
                             @click="addEmployee(1)"
-                            :tabindex="21"
+                            :tabindex="19"
                         ></ms-button>
                     </div>
                 </div>
@@ -378,11 +382,6 @@
             @isUpdate="isEditEmployee"
             @coDialogUpdate="coDialogUpdate"
         ></dialog-update>
-        <ms-toast
-            v-if="isShowToastError"
-            :isError="true"
-            @closeOpenToast="closeOpenToast"
-        ></ms-toast>
     </div>
 </template>
 <script>
@@ -408,48 +407,47 @@ export default {
         return {
             // Thông tin nhân viên
             employee: {
-                EmployeeCode: "",
-                EmployeeName: "",
-                DepartmentId: "",
-                Gender: "1",
-                EmployeePosition: "",
-                DateOfBirth: "",
-                IdentityNumber: "",
-                IdentityDate: "",
-                IdentityPlace: "",
-                Address: "",
-                PhoneNumber: "",
-                TelephoneNumber: "",
-                Email: "",
-                BankAccountNumber: "",
-                BankBranchName: "",
-                BankProvinceName: "",
+                EmployeeCode: null,
+                EmployeeName: null,
+                DepartmentID: null,
+                Gender: null,
+                JobPositionName: null,
+                DateofBirth: null,
+                IdentityNumber: null,
+                IdentityDate: null,
+                IdentityPlace: null,
+                Adress: null,
+                PhoneNumber: null,
+                TelephoneNumber: null,
+                Email: null,
+                BankNumber: null,
+                BankName: null,
+                BankBranch: null,
             },
             // Trạng thái validate nhân viên
             validate: {
                 code: false,
                 name: false,
                 DepartmentId: false,
-                employeePosition: false,
+                JobPositionName: false,
                 DateOfBirth: false,
                 IdentityNumber: false,
-                IdentityDate: false,
                 IdentityDate: false,
                 IdentityPlace: false,
                 PhoneNumber: false,
                 TelephoneNumber: false,
-                Address: false,
+                Adress: false,
                 Email: false,
-                BankAccountNumber: false,
-                BankBranchName: false,
-                BankProvinceName: false,
+                BankNumber: false,
+                BankName: false,
+                BankBranch: false,
             },
             // Text cảnh báo nhân viên
             errors: {
                 code: "",
                 name: "",
                 DepartmentId: "",
-                employeePosition: "",
+                JobPositionName: "",
                 DateOfBirth: "",
                 IdentityDate: "",
                 IdentityNumber: "",
@@ -457,11 +455,11 @@ export default {
                 IdentityPlace: "",
                 PhoneNumber: "",
                 TelephoneNumber: "",
-                Address: "",
+                Adress: "",
                 Email: "",
-                BankAccountNumber: "",
-                BankBranchName: "",
-                BankProvinceName: "",
+                BankNumber: "",
+                BankName: "",
+                BankBranch: "",
             },
             // Danh sách đơn vị
             listDepartment: [],
@@ -482,8 +480,9 @@ export default {
                 show: false,
                 message: "",
             },
-            // Ẩn hiện toast error
-            isShowToastError: false,
+
+            // Tabfocus
+            tabForcus: false,
         };
     },
     props: [
@@ -496,23 +495,45 @@ export default {
         "employeeEdit",
         "edit",
     ],
-
-    watch: {
-        employeeEditItem() {
-            console.log(this.employeeEditItem);
-        },
-        // validateForm() {
-        //     this.validate.code = false;
-        //     this.errors.code;
-        // },
-    },
     created() {
         this.getDepartmentList();
-        // this.employee = this.employeeEditItem;
         this.getEmployeeEditItem();
+
+        // gán giá trị cho employee
+        if (this.employeeEditItem) {
+            this.employee = this.employeeEditItem;
+        }
+        // Lẫy mã mới
+        if (!this.edit) {
+            this.newEmployeeCode();
+        }
+        window.addEventListener("keyup", this.listenerKeyup);
+    },
+    mounted() {
+        console.log(this.$refs.input.focus);
     },
 
     methods: {
+        /**
+         * Thêm sự kiện phím tắt
+         */
+        listenerKeyup(e) {
+            try {
+                debugger;
+                if (e.key == "Escape") {
+                    this.closePopup();
+                } else if (e.ctrlKey) {
+                    if (e.key == "F8") {
+                        this.addEmployee(1);
+                    }
+                    if (e.key == "F9") {
+                        this.addEmployee(0);
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        },
         /**
          * Bật tắt Dialog update và gửi trạng thái
          * author: NHAnh (31/10/2022)
@@ -541,10 +562,9 @@ export default {
                     break;
                 case "EmployeeName":
                     this.employee.EmployeeName = data.value;
-
                     break;
-                case "EmployeePosition":
-                    this.employee.EmployeePosition = data.value;
+                case "JobPositionName":
+                    this.employee.JobPositionName = data.value;
 
                     break;
                 case "IdentityNumber":
@@ -553,8 +573,8 @@ export default {
                 case "IdentityPlace":
                     this.employee.IdentityPlace = data.value;
                     break;
-                case "Address":
-                    this.employee.Address = data.value;
+                case "Adress":
+                    this.employee.Adress = data.value;
                     break;
                 case "PhoneNumber":
                     this.employee.PhoneNumber = data.value;
@@ -565,14 +585,14 @@ export default {
                 case "Email":
                     this.employee.Email = data.value;
                     break;
-                case "BankAccountNumber":
-                    this.employee.BankAccountNumber = data.value;
+                case "BankNumber":
+                    this.employee.BankNumber = data.value;
                     break;
-                case "BankBranchName":
-                    this.employee.BankBranchName = data.value;
+                case "BankName":
+                    this.employee.BankName = data.value;
                     break;
-                case "BankProvinceName":
-                    this.employee.BankProvinceName = data.value;
+                case "BankBranch":
+                    this.employee.BankBranch = data.value;
                     break;
                 default:
                 // code block
@@ -589,7 +609,7 @@ export default {
                 code: false,
                 name: false,
                 DepartmentId: false,
-                employeePosition: false,
+                JobPositionName: false,
                 DateOfBirth: false,
                 IdentityNumber: false,
                 IdentityDate: false,
@@ -597,17 +617,17 @@ export default {
                 IdentityPlace: false,
                 PhoneNumber: false,
                 TelephoneNumber: false,
-                Address: false,
+                Adress: false,
                 Email: false,
-                BankAccountNumber: false,
-                BankBranchName: false,
-                BankProvinceName: false,
+                BankNumber: false,
+                BankName: false,
+                BankBranch: false,
             }),
                 (this.errors = {
                     code: "",
                     name: "",
                     DepartmentId: "",
-                    employeePosition: "",
+                    JobPositionName: "",
                     DateOfBirth: "",
                     IdentityDate: "",
                     IdentityNumber: "",
@@ -615,29 +635,30 @@ export default {
                     IdentityPlace: "",
                     PhoneNumber: "",
                     TelephoneNumber: "",
-                    Address: "",
+                    Adress: "",
                     Email: "",
-                    BankAccountNumber: "",
-                    BankBranchName: "",
-                    BankProvinceName: "",
+                    BankNumber: "",
+                    BankName: "",
+                    BankBranch: "",
                 }),
                 (this.errors.code = "");
             if (!this.employee.EmployeeCode) {
                 this.validate.code = true;
-                this.errors.code = "Mã nhân viên không được để trống";
+                this.errors.code = "Mã không được để trống";
                 isValidate = false;
             }
             if (!this.employee.EmployeeName) {
                 this.validate.name = true;
-                this.errors.name = "Tên nhân viên không được để trống";
+                this.errors.name = "Tên không được để trống";
                 isValidate = false;
             }
-            if (!this.employee.DepartmentId) {
+            if (!this.employee.DepartmentID) {
                 this.validate.DepartmentId = true;
-                this.errors.DepartmentId = "Đơn vị viên không được để trống";
+                this.errors.DepartmentId =
+                    "Đơn vị nhân viên không được để trống";
                 isValidate = false;
             }
-            if (this.validateTime(this.employee.DateOfBirth)) {
+            if (this.validateTime(this.employee.DateofBirth)) {
                 this.validate.DateOfBirth = true;
                 this.errors.DateOfBirth = "Ngày sinh không hợp lệ";
                 isValidate = false;
@@ -680,11 +701,10 @@ export default {
                     isValidate = false;
                 }
             }
-            if (this.employee.BankAccountNumber) {
-                if (!this.isNumber(this.employee.BankAccountNumber)) {
-                    this.validate.BankAccountNumber = true;
-                    this.errors.BankAccountNumber =
-                        "Tài khoản ngân hàng phải là số";
+            if (this.employee.BankNumber) {
+                if (!this.isNumber(this.employee.BankNumber)) {
+                    this.validate.BankNumber = true;
+                    this.errors.BankNumber = "Tài khoản ngân hàng phải là số";
                     isValidate = false;
                 }
             }
@@ -700,11 +720,12 @@ export default {
          * author: NHAnh(06/11/2022)
          */
         validateFormCode() {
+            this.tabForcus = false;
             this.validate.code = false;
             this.errors.code = "";
             if (!this.employee.EmployeeCode) {
                 this.validate.code = true;
-                this.errors.code = "Mã nhân viên không được để trống";
+                this.errors.code = "Mã không được để trống";
                 return false;
             } else {
                 this.validate.code = false;
@@ -717,7 +738,7 @@ export default {
             this.errors.name = "";
             if (!this.employee.EmployeeName) {
                 this.validate.name = true;
-                this.errors.name = "Tên nhân viên không được để trống";
+                this.errors.name = "Tên không được để trống";
                 return false;
             } else {
                 this.validate.name = false;
@@ -757,6 +778,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
+
+            console.log(this.listDepartment);
         },
 
         /**
@@ -764,7 +787,7 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         dpId(data) {
-            this.employee.DepartmentId = data.id;
+            this.employee.DepartmentID = data.id;
         },
 
         /**
@@ -772,72 +795,76 @@ export default {
          * author: NHAnh (31/10.2022)
          */
         async addEmployee(value) {
-            if (this.validateForm()) {
-                if (this.edit) {
-                    try {
-                        this.coDialogUpdate();
-                    } catch (error) {
-                        console.log(error);
+            try {
+                if (this.validateForm()) {
+                    if (this.edit) {
+                        try {
+                            this.coDialogUpdate();
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    } else {
+                        const res = await axios
+                            .post(`${BASE_URL}`, this.employee)
+                            .then(res => {
+                                debugger;
+                                this.employee = {
+                                    EmployeeCode: null,
+                                    EmployeeName: null,
+                                    DepartmentId: null,
+                                    Gender: null,
+                                    JobPositionName: null,
+                                    DateofBirth: null,
+                                    IdentityNumber: null,
+                                    IdentityDate: null,
+                                    IdentityPlace: null,
+                                    Adress: null,
+                                    PhoneNumber: null,
+                                    TelephoneNumber: null,
+                                    Email: null,
+                                    BankNumber: null,
+                                    BankName: null,
+                                    BankBranch: null,
+                                };
+                                if (value == 0) {
+                                    this.reloadList();
+                                    this.$emit("onClose");
+                                } else {
+                                    this.newEmployeeCode();
+                                }
+                                this.tabForcus = true;
+                                this.$emit("openToastAdd", true);
+                            })
+                            .catch(error => {
+                                console.log(error.response.data.UserMsg);
+                                if (
+                                    error.response.data.UserMsg ==
+                                    "Mã nhân viên đã tồn tại trong hệ thống"
+                                ) {
+                                    this.isWarningStatus = true;
+                                    this.errorCode = false;
+                                    this.isWarningDialog();
+                                    this.validate.code = true;
+                                    this.errors.code = "Mã đã tồn tại";
+                                } else if (
+                                    error.response.data.UserMsg ==
+                                    "Mã nhân viên phải kết thúc bằng số"
+                                ) {
+                                    (this.errorCode = true),
+                                        (this.isWarningStatus = false);
+                                    this.isWarningDialog();
+                                } else {
+                                    alert("Có lỗi xảy ra");
+                                }
+                            });
                     }
                 } else {
-                    const res = await axios
-                        .post(`${BASE_URL}`, this.employee)
-                        .then(res => {
-                            this.employee = {
-                                EmployeeCode: "",
-                                EmployeeName: "",
-                                DepartmentId: "",
-                                Gender: "1",
-                                EmployeePosition: "",
-                                DateOfBirth: "",
-                                IdentityNumber: "",
-                                IdentityDate: "",
-                                IdentityPlace: "",
-                                Address: "",
-                                PhoneNumber: "",
-                                TelephoneNumber: "",
-                                Email: "",
-                                BankAccountNumber: "",
-                                BankBranchName: "",
-                                BankProvinceName: "",
-                            };
-                            if (value == 0) {
-                                this.reloadList();
-                                this.$emit("onClose");
-                            }
-                            this.$emit("openToastAdd", true);
-                        })
-                        .catch(error => {
-                            console.log(error.response);
-                            this.isShowToastError = true;
-                            setTimeout(() => {
-                                this.isShowToastError = false;
-                            }, 4000);
-                            if (
-                                error.response.data.devMsg ==
-                                "Mã khách hàng đã tồn tại trong hệ thống."
-                            ) {
-                                this.isWarningStatus = true;
-                                this.errorCode = false;
-                                this.isWarningDialog();
-                            } else if (
-                                error.response.data.devMsg ==
-                                "Thông tin mã nhân viên không hợp lệ."
-                            ) {
-                                (this.errorCode = true),
-                                    (this.isWarningStatus = false);
-                                this.isWarningDialog();
-                            }
-                        });
+                    this.errorCode = false;
+                    this.isWarningStatus = false;
+                    this.isWarningDialog();
                 }
-            } else {
-                this.isShowToastError = true;
-                setTimeout(() => {
-                    this.isShowToastError = false;
-                }, 4000);
-                this.errorCode = false;
-                this.isWarningStatus = false;
-                this.isWarningDialog();
+            } catch (err) {
+                console.log(err);
             }
         },
 
@@ -846,22 +873,44 @@ export default {
          * author: NHAnh(05/11/2022)
          */
         isEditEmployee() {
-            var me = this;
-            axios
-                .put(`${BASE_URL}/${this.employee.EmployeeId}`, this.employee)
-                .then(res => {
-                    console.log(res);
-                    me.$emit("onClose");
-                    me.$emit("openToastEdit", true);
-                    me.$emit("reloadData");
-                })
-                .catch(e => {
-                    me.errorCode = false;
-                    me.isWarningStatus = false;
-                    me.dataDialog.show = true;
-                    me.isWarningDialog();
-                    console.log(e);
-                });
+            try {
+                var me = this;
+                axios
+                    .put(
+                        `${BASE_URL}/${this.employee.EmployeeId}`,
+                        this.employee
+                    )
+                    .then(res => {
+                        console.log(res);
+                        me.$emit("onClose");
+                        me.$emit("openToastEdit", true);
+                        me.$emit("reloadData");
+                    })
+                    .catch(e => {
+                        me.errorCode = false;
+                        me.isWarningStatus = false;
+                        me.dataDialog.show = true;
+                        me.isWarningDialog();
+                        console.log(e);
+                    });
+            } catch (err) {
+                console.log(err);
+            }
+        },
+
+        /**
+         * Lấy mã nhân viên mới
+         * author: NHAnh(05/11/2022)
+         */
+        newEmployeeCode() {
+            try {
+                axios
+                    .get(`${BASE_URL}/newEmployeeCode`)
+                    .then(res => (this.employee.EmployeeCode = res.data))
+                    .catch(e => console.log(e));
+            } catch (error) {
+                console.log(error);
+            }
         },
 
         /**
@@ -869,7 +918,11 @@ export default {
          * author: NHAnh (31/10/2022)
          */
         isWarningDialog() {
-            this.isWarning = !this.isWarning;
+            try {
+                this.isWarning = !this.isWarning;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -877,19 +930,23 @@ export default {
          * author: NHAnh (31/10/2022)
          */
         closePopup() {
-            this.$emit("onClose");
-        },
-
-        tabOrder() {
-            this.$refs.input.focus();
+            try {
+                this.$emit("onClose");
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
-         * đóng toast lỗi
-         * author: NHAnh (09/11/2022)
+         * Tabindex ô input cuối về ô input mã
+         * Author: NHANH(31/10/2022)
          */
-        closeOpenToast() {
-            this.isShowToastError = false;
+        tabOrder() {
+            try {
+                this.tabForcus = true;
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };
@@ -912,7 +969,7 @@ export default {
     /* min-width: 900px; */
     width: 900px;
     background-color: #fff;
-    border: 1px solid #666666;
+    border: 1px solid #e6e6e6;
     border-radius: 4px;
     z-index: 1;
 }
@@ -993,7 +1050,7 @@ export default {
 }
 .form-group label {
     padding-bottom: 8px;
-    font-weight: 700;
+    font-weight: 600;
 }
 .form-group .error_text {
     position: absolute;
@@ -1026,7 +1083,7 @@ export default {
 .don-vi .combobox input {
     border-width: 1px;
     border-radius: 4px;
-    border-color: #bfbfbf;
+    border-color: #e6e6e6;
     border-style: solid;
 }
 .don-vi .combobox .combobox__data {
@@ -1054,7 +1111,7 @@ export default {
 }
 .content-employee__contact {
     width: 100%;
-    border-bottom: 1px solid #bfbfbf;
+    border-bottom: 1px solid #e6e6e6;
 }
 .di-dong {
     width: calc(25% - 10px);

@@ -28,19 +28,23 @@ export default {
          * Author: NHAnh (06/11/2022)
          */
         dialogText() {
-            // Cảnh báo khi trường Mã nhân viên bị trùng
-            if (this.warning) {
-                return `Mã nhân viên '${this.employeeCode}' đã tồn tại trong hệ
-                        thông, vui lòng kiểm tra lại`;
-                // Cảnh báo khi trùng mã nhân viên
-            } else if (this.errorCode) {
-                return `Thông tin mã nhân viên không hợp lệ.`;
-                // Cảnh báo khi sửa trùng mã
-            } else if (this.warningCode) {
-                return `Có lỗi xảy ra vui lòng liên hệ Giảng viên để được hỗ trợ!`;
+            try {
+                // Cảnh báo khi trường Mã nhân viên bị trùng
+                if (this.warning) {
+                    return `Mã nhân viên '${this.employeeCode}' đã tồn tại trong hệ
+                            thông, vui lòng kiểm tra lại`;
+                    // Cảnh báo khi trùng mã nhân viên
+                } else if (this.errorCode) {
+                    return `Thông tin mã nhân viên không hợp lệ.`;
+                    // Cảnh báo khi sửa trùng mã
+                } else if (this.warningCode) {
+                    return `Có lỗi xảy ra vui lòng liên hệ Giảng viên để được hỗ trợ!`;
+                }
+                // Cảnh báo khi thiếu thông tin nhân viên
+                return `Vui lòng điền đầy đủ và chính xác thông tin!`;
+            } catch (err) {
+                console.log(err);
             }
-            // Cảnh báo khi thiếu thông tin nhân viên
-            return `Vui lòng điền đầy đủ và chính xác thông tin!`;
         },
 
         /**
@@ -48,7 +52,11 @@ export default {
          * Author: NHA(06/11/2022)
          */
         isWarningDialog() {
-            this.$emit("isWarningDialog");
+            try {
+                this.$emit("isWarningDialog");
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };
@@ -69,12 +77,11 @@ export default {
 .m-noti-box {
     width: 444px;
     min-width: 444px;
-    height: 183px;
     background-color: #fff;
     border-radius: 4px;
 }
 .box-content {
-    padding: 32px;
+    padding: 24px;
     height: 100%;
     box-sizing: border-box;
 }

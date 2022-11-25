@@ -6,6 +6,7 @@
         v-click-away="onClickAway"
     >
         <input
+            ref="dropdown"
             type="text"
             :class="[
                 'm-input dropdown__input',
@@ -16,6 +17,7 @@
             @input="changeInput"
             @blur="blur"
             :tabindex="tabindex"
+            @keydown="onKeyDown"
         />
         <div
             :class="[
@@ -38,13 +40,14 @@
                             ? 'item-active'
                             : '',
                     ]"
-                    :data-idDpm="dropdownItem.DepartmentId"
+                    :data-idDpm="dropdownItem.DepartmentID"
                     @click="
                         handleClickDD(
                             $event,
                             dropdownItem.title || dropdownItem.DepartmentName
                         )
                     "
+                    @keydown="onKeyDown"
                 >
                     {{ dropdownItem.title || dropdownItem.DepartmentName }}
                 </li>
@@ -58,6 +61,7 @@ export default {
     data() {
         return {
             inputValue: 10,
+            dropdownId: "",
             modelInput: "",
             dataShow: false,
             isActive: false,
@@ -98,22 +102,9 @@ export default {
         },
         value: {},
     },
-    // props: ["listDropdownItem", "downData", "defaultValue", "dpName"],
     created() {
-        /**
-         * Gán giá trị khi khởi tạo dropdown
-         * author: NHAnh (06/11/2022)
-         */
-        // if (this.dpName) {
-        //     var depar = this.listDropdownItem.find(
-        //         dp => dp.DepartmentId == this.dpName
-        //     ).DepartmentName;
-        //     this.inputValue = depar;
-        // } else if (!this.edit) {
-        //     this.inputValue = this.defaultValue;
-        // } else {
-        //     this.inputValue = 10;
-        // }
+        // document.addEventListener("focusin", this.focusChanged);
+        window.addEventListener("keydown", this.listenerKeydown);
     },
     watch: {
         /**
@@ -121,37 +112,97 @@ export default {
          * author: NHAnh (06/11/2022)
          */
         dpName() {
-            if (!this.dpName) {
-                this.inputValue = this.defaultValue;
+            try {
+                if (!this.dpName) {
+                    this.inputValue = this.defaultValue;
+                }
+            } catch (err) {
+                console.log(err);
             }
         },
         listDropdownItem(value) {
-            if (value) {
-                if (this.dpName) {
-                    var depar = this.listDropdownItem.find(
-                        dp => dp.DepartmentId == this.dpName
-                    ).DepartmentName;
-                    this.inputValue = depar;
-                } else if (!this.edit) {
-                    this.inputValue = this.defaultValue;
-                } else {
-                    this.inputValue = 10;
+            try {
+                if (value) {
+                    if (this.dpName) {
+                        var depar = this.listDropdownItem.find(
+                            dp => dp.DepartmentID == this.dpName
+                        ).DepartmentName;
+                        this.inputValue = depar;
+                    } else if (!this.edit) {
+                        this.inputValue = this.defaultValue;
+                    } else {
+                        this.inputValue = 10;
+                    }
                 }
+            } catch (err) {
+                console.log(err);
             }
         },
     },
     methods: {
         /**
+         * Kiểm tra có focus không
+         */
+        onKeyDown(e) {
+            if (e.key == "Enter") {
+                if (this.$refs.dropdown) {
+                    this.$refs.dropdown.focus();
+                }
+                this.dataShow = !this.dataShow;
+            }
+        },
+        /**
+         * Bắt sự kiện khi key down
+         */
+        listenerKeydown(e) {
+            if (this.dataShow) {
+                if (this.$refs.dropdown) {
+                    this.$refs.dropdown.focus();
+                }
+                var indexItemSelected = this.listDropdownItem.findIndex(
+                    x => x.DepartmentID == this.deparId.id
+                );
+                if (e.key == "ArrowDown") {
+                    indexItemSelected++;
+                    indexItemSelected =
+                        indexItemSelected < this.listDropdownItem.length
+                            ? indexItemSelected
+                            : 0;
+                    this.inputValue =
+                        this.listDropdownItem[indexItemSelected].DepartmentName;
+                    this.deparId.id =
+                        this.listDropdownItem[indexItemSelected].DepartmentID;
+                    this.$emit("dropdown-value", this.deparId);
+                } else if (e.key == "ArrowUp") {
+                    indexItemSelected--;
+                    indexItemSelected =
+                        indexItemSelected >= 0
+                            ? indexItemSelected
+                            : this.listDropdownItem.length - 1;
+                    this.inputValue =
+                        this.listDropdownItem[indexItemSelected].DepartmentName;
+                    this.deparId.id =
+                        this.listDropdownItem[indexItemSelected].DepartmentID;
+                    this.$emit("dropdown-value", this.deparId);
+                }
+            }
+        },
+        /**
          * click lấy giá trị item gán vào ô input
          * author: NHAnh(06/11/2022)
          */
         handleClickDD(event, value) {
-            this.inputValue = value;
-            this.deparId.id = event.target.dataset.iddpm;
-            this.deparId.inputValue = this.inputValue;
-            this.$emit("dropdown-value", this.deparId);
-            this.$emit("pagging_value", this.inputValue);
-            this.$emit("validateDD");
+            try {
+                this.inputValue = value;
+                console.log(event);
+                this.deparId.id = event.target.dataset.iddpm;
+                this.deparId.inputValue = this.inputValue;
+                this.$emit("dropdown-value", this.deparId);
+                this.$emit("pagging_value", this.inputValue);
+                this.$emit("validateDD");
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -159,15 +210,23 @@ export default {
          * author: NHAnh (02/11/2022)
          */
         onClickAway(event) {
-            this.dataShow = false;
+            try {
+                this.dataShow = false;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
          * Sự kiện blur dropdown
          */
         blur(event) {
-            this.$emit("blur");
-            this.$emit("validateDD");
+            try {
+                this.$emit("blur");
+                this.$emit("validateDD");
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };
@@ -247,6 +306,8 @@ ul {
     border-radius: 4px !important;
 }
 .down-data {
+    max-height: 160px;
+    overflow: auto;
     bottom: unset;
     top: calc(100% + 1px);
     z-index: 10;

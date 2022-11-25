@@ -29,6 +29,7 @@ export default {
 <style>
 .m-btn {
     height: 36px;
+    min-width: 80px;
     border-radius: 4px;
     padding: 0 16px;
     border: none;
@@ -41,6 +42,7 @@ export default {
     color: #fff;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 .m-btn:hover {
     background-color: #73c663;
@@ -54,7 +56,7 @@ export default {
 .m-btn-extra {
     background-color: #fff;
     color: #000;
-    border: 1px solid #8d9096;
+    border: 1px solid #e6e6e6;
     font-weight: 500;
     font-size: 14;
 }

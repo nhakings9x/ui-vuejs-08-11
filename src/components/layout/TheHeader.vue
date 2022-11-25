@@ -56,8 +56,12 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         closeSidebar() {
-            this.colHeader = !this.colHeader;
-            this.eventBus.emit("closeSidebar", this.colHeader);
+            try {
+                this.colHeader = !this.colHeader;
+                this.eventBus.emit("closeSidebar", this.colHeader);
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };

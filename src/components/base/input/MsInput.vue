@@ -46,6 +46,17 @@ export default {
             type: Boolean,
             default: false,
         },
+        tabForcus: {
+            type: Boolean,
+        },
+    },
+
+    watch: {
+        tabForcus(value) {
+            if (value == true) {
+                this.$refs.input.focus();
+            }
+        },
     },
 
     mounted() {
@@ -58,17 +69,25 @@ export default {
         // Truyền dữ liệu lên cpn cha
         // NHAnh(06/11/2022)
         returnValueInput(e) {
-            this.$emit("dataInput", {
-                value: e.target.value,
-                target: this.name,
-            });
+            try {
+                this.$emit("dataInput", {
+                    value: e.target.value,
+                    target: this.name,
+                });
+            } catch (err) {
+                console.log(err);
+            }
         },
         /**
          * Sự kiện onblur ô input để validate
          * @param {} e
          */
         onBlur(e) {
-            this.$emit("blur", this.valueInput);
+            try {
+                this.$emit("blur", this.valueInput);
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };
@@ -88,7 +107,7 @@ export default {
     color: #000;
     border-width: 1px;
     border-radius: 4px;
-    border-color: #bfbfbf;
+    border-color: #e6e6e6;
     border-style: solid;
     outline: unset;
     padding: 0 16px;
@@ -102,9 +121,8 @@ export default {
 }
 
 .m-input:hover {
-    border-color: #73c663;
-    cursor: auto;
-    /* background-color: #e6e6e6; */
+    cursor: pointer;
+    background-color: #e6e6e6;
 }
 
 .m-input:focus {

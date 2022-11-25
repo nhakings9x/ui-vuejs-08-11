@@ -1,12 +1,23 @@
 <template>
     <div class="m-main__table">
         <div class="m-main__table-header">
-            <div class="table-header-left">
-                <!-- <label for="" class="mr-16"
-                    >Đã chọn: <b>{{ listClicked }}</b> nhân viên
-                    {{ getList }}</label
-                >
-                <ms-button btnText="Xóa" class="btn-delete"></ms-button> -->
+            <div>
+                <div class="table-header-left" v-show="listClicked.length > 0">
+                    <label for="" class="mr-16"
+                        >Đã chọn: <b>{{ listClicked.length }}</b></label
+                    >
+                    <label
+                        for=""
+                        class="lable-unchecked mr-16"
+                        @click="clearListDelete"
+                        >Bỏ chọn</label
+                    >
+                    <ms-button
+                        btnText="Xóa"
+                        class="btn-delete"
+                        @click="deleteBatch()"
+                    ></ms-button>
+                </div>
             </div>
             <div class="table-header-right">
                 <div class="mr-16" style="width: 300px">
@@ -21,6 +32,14 @@
                     <div class="tooltip tooltip-reload">
                         <label for=""
                             >Lấy lại dữ liệu
+                            <div></div
+                        ></label>
+                    </div>
+                </div>
+                <div class="icon-excel tooltip-relative" @click="reloadList()">
+                    <div class="tooltip tooltip-excel">
+                        <label for=""
+                            >Xuất khẩu Excel
                             <div></div
                         ></label>
                     </div>
@@ -41,14 +60,17 @@
                     <th class="text-align-left">TÊN NHÂN VIÊN</th>
                     <th class="text-align-left">GIỚI TÍNH</th>
                     <th class="text-align-center">NGÀY SINH</th>
-                    <th class="text-align-left thead__so-cmnd">
+                    <th
+                        class="text-align-left thead__so-cmnd"
+                        title="Số chứng minh nhân dân"
+                    >
                         SỐ CMND
-                        <div class="tooltip tooltip__so-cmnd">
+                        <!-- <div class="tooltip tooltip__so-cmnd">
                             <label for=""
                                 >Số chứng minh nhân dân
                                 <div></div
                             ></label>
-                        </div>
+                        </div> -->
                     </th>
                     <th class="text-align-left">CHỨC DANH</th>
                     <th class="text-align-left">TÊN ĐƠN VỊ</th>
@@ -64,72 +86,73 @@
                 </thead>
                 <tbody>
                     <tr
-                        :class="employee.isChecked ? 'm-row-selected' : ''"
-                        v-for="employee in listEmployee"
-                        :key="employee.EmployeeId"
-                        @dblclick="employeeEdit($event, employee)"
+                        :class="emp.isChecked ? 'm-row-selected' : ''"
+                        v-for="emp in listEmployee"
+                        :key="emp.employeeId"
+                        @dblclick="employeeEdit($event, emp)"
                     >
                         <td class="text-align-center">
                             <input
                                 type="checkbox"
                                 class="is-checked"
-                                v-model="employee.isChecked"
+                                v-model="emp.isChecked"
+                                @click="addListDelete(emp)"
                             />
                         </td>
                         <td class="text-align-left">
-                            {{ employee.EmployeeCode }}
+                            {{ emp.EmployeeCode }}
                         </td>
                         <td class="text-align-left">
-                            {{ employee.EmployeeName }}
+                            {{ emp.EmployeeName }}
                         </td>
                         <td class="text-align-left">
-                            {{ employee.GenderName }}
+                            {{ handleGender(emp.Gender) }}
                         </td>
                         <td class="text-align-center">
-                            {{ dateTime(employee.DateOfBirth) }}
+                            {{ dateTime(emp.DateofBirth) }}
                         </td>
                         <td class="text-align-left">
-                            {{ employee.IdentityNumber }}
+                            {{ emp.IdentityNumber }}
                         </td>
                         <td class="text-align-left">
-                            {{ employee.EmployeePosition }}
+                            {{ emp.JobPositionName }}
                         </td>
                         <td class="text-align-left">
-                            {{ employee.DepartmentName }}
+                            {{ emp.DepartmentName }}
                         </td>
                         <td class="text-align-left">
-                            {{ employee.BankAccountNumber }}
+                            {{ emp.BankNumber }}
                         </td>
                         <td class="text-align-left">
-                            {{ employee.BankBranchName }}
+                            {{ emp.BankName }}
                         </td>
                         <td class="text-align-left">
-                            {{ employee.BankProvinceName }}
+                            {{ emp.BankBranch }}
                         </td>
                         <td
                             :class="[
                                 'text-align-center td-sticky',
-                                employee.closeOpenDelete ? 'z-index-5' : '',
+                                emp.closeOpenDelete ? 'z-index-5' : '',
                             ]"
                         >
                             <div class="update-table">
                                 <button
                                     for=""
-                                    @click="employeeEdit($event, employee)"
+                                    @click="employeeEdit($event, emp)"
                                 >
                                     Sửa
                                 </button>
                                 <div
                                     class="icon-update"
                                     @click="
-                                        employee.closeOpenDelete =
-                                            !employee.closeOpenDelete
+                                        emp.closeOpenDelete =
+                                            !emp.closeOpenDelete
                                     "
                                 >
                                     <div
                                         :class="[
                                             'icon-down-table icon-update',
-                                            employee.closeOpenDelete
+                                            emp.closeOpenDelete
                                                 ? 'icon-update-focus trasform-icon'
                                                 : '',
                                         ]"
@@ -137,10 +160,10 @@
 
                                     <div
                                         class="list-update"
-                                        v-if="employee.closeOpenDelete"
+                                        v-if="emp.closeOpenDelete"
                                         v-click-away="
                                             () => {
-                                                onClickAway($event, employee);
+                                                onClickAway($event, emp);
                                             }
                                         "
                                     >
@@ -148,15 +171,21 @@
                                             <li
                                                 @click="
                                                     oClDialogDelete(
-                                                        employee.EmployeeId,
-                                                        employee.EmployeeCode
+                                                        emp.EmployeeId,
+                                                        emp.EmployeeCode
                                                     )
                                                 "
                                             >
                                                 Xóa
                                             </li>
+                                            <li
+                                                @click="
+                                                    employeeEdit($event, emp, 1)
+                                                "
+                                            >
+                                                Nhân bản
+                                            </li>
                                         </ul>
-                                        <!-- <div class="overlay-delete"></div> -->
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +196,7 @@
 
             <ms-popup
                 v-if="popupStatus"
-                titlePopup="Sửa nhân viên"
+                :titlePopup="titlePopup"
                 :employeeEditItem="employeeEditItem"
                 :putEmployee="putEmployeePopup"
                 :employeeEdit="employeeEdit"
@@ -175,13 +204,16 @@
                 @onClose="onClose"
                 @openToastEdit="openToastEdit"
                 @reloadData="reloadData"
-                :edit="true"
+                @openToastAdd="openToastAdd"
+                :edit="isEdit"
             ></ms-popup>
             <dialog-delete
                 v-if="isDelete"
                 :employeeID="idEmployee"
                 :employeeName="nameEmployee"
+                :listClicked="listClicked"
                 :reloadList="reloadList"
+                :isDeleteBatch="isDeleteBatch"
                 :oClDialogDelete="oClDialogDelete"
                 :employeeEdit="employeeEdit"
                 @openToast="openToast"
@@ -198,7 +230,7 @@
             ></ms-toast>
         </div>
         <div v-if="hadData" class="hadData">
-            <b for="" class="">Không có dữ liệu !!!</b>
+            <b for="" class="">{{ errorTextApi }}</b>
         </div>
     </div>
 </template>
@@ -209,10 +241,13 @@ import MsInput from "../base/input/MsInput.vue";
 import MsPopup from "../base/popup/MsPopup.vue";
 import MsToast from "../base/toast/MsToast.vue";
 import { directive } from "vue3-click-away";
+import { BASE_URL } from "../../constans/constans";
+import axios from "axios";
+import { GENDER } from "../../constans/enums";
 
 export default {
     components: { MsInput, MsButton, DialogDelete, MsPopup, MsToast },
-    props: ["listEmployee", "reloadList", "hadData"],
+    props: ["listEmployee", "reloadList", "hadData", "errorTextApi"],
     data() {
         return {
             checkAll: false,
@@ -221,7 +256,7 @@ export default {
             isDelete: false,
             idEmployee: "",
             nameEmployee: "",
-            getList: null,
+            // getList: null,
             employeeEditItem: {},
             // mở Popup
             popupStatus: false,
@@ -231,15 +266,24 @@ export default {
             searchValueInput: "",
             putEmployeePopup: true,
             toastStatusEdit: false,
+            isEdit: true,
+            titlePopup: "Sửa nhân viên",
+            isDeleteBatch: false,
         };
     },
     // Click outside
     directives: {
         ClickAway: directive,
     },
-    created() {
-        this.eventBus.on("getList", e => (this.getList = e));
+
+    watch: {
+        // listEmployee(a) {
+        //     this.listClicked = this.listEmployee.filter(
+        //         e => e.isChecked == true
+        //     );
+        // },
     },
+
     methods: {
         /**
          * Lấy giá trị ô input search
@@ -255,6 +299,9 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         openToast(data) {
+            debugger;
+            this.checkAll = false;
+            this.listClicked = [];
             this.toastStatus = data;
             setTimeout(() => {
                 this.toastStatus = false;
@@ -291,13 +338,66 @@ export default {
             try {
                 if (!this.checkAll) {
                     this.listEmployee.map(e => (e.isChecked = true));
-                } else this.listEmployee.map(e => (e.isChecked = false));
-                // let check = this.listEmployee.every(e => (e.isChecked = false));
-                // if (!check) {
-                //     this.checkAll = false;
-                // }
+                    this.listClicked = this.listEmployee.map(e => e.EmployeeId);
+                } else {
+                    this.listEmployee.map(e => (e.isChecked = false));
+                    this.listClicked = [];
+                }
+                console.log(this.listClicked);
             } catch (error) {
                 console.log(error);
+            }
+        },
+
+        /**
+         * Tích chọn employe thêm vào list xóa
+         * Author: NHAnh(24/11/2022)
+         */
+        addListDelete(emp) {
+            emp.isChecked = !emp.isChecked;
+            if (emp.isChecked == true) {
+                this.listClicked.push(emp.EmployeeId);
+            } else if (emp.isChecked == false) {
+                this.listClicked = this.listClicked.filter(
+                    e => e != emp.EmployeeId
+                );
+            }
+            if (this.listClicked.length < this.listEmployee.length) {
+                this.checkAll = false;
+            }
+            console.log(this.listClicked);
+        },
+
+        /**
+         * Gọi API thực hiện xóa nhiều
+         * Author: NHAnh(24/11/2022)
+         */
+        deleteBatch() {
+            this.isDeleteBatch = true;
+            this.isDelete = !this.isDelete;
+        },
+
+        /**
+         * Fomat giới tính
+         * author : NHAnh(23/11/2022)
+         */
+        handleGender(gender) {
+            try {
+                let gen = "";
+                switch (gender) {
+                    case GENDER.MALE:
+                        gen = "Nam";
+                        break;
+                    case GENDER.FEMALE:
+                        gen = "Nữ";
+                        break;
+                    case GENDER.OTHER:
+                        gen = "Khác";
+                        break;
+                }
+                return gen;
+            } catch (err) {
+                console.log(err);
             }
         },
 
@@ -306,6 +406,7 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         oClDialogDelete(id, name) {
+            this.isDeleteBatch = false;
             this.isDelete = !this.isDelete;
             this.idEmployee = id;
             this.nameEmployee = name;
@@ -330,14 +431,21 @@ export default {
         },
 
         /**
-         * Format ô input date trong popup sửa nhân viên
+         * Format ô input date trong popup sửa và nhân bản nhân viên, nếu value == 1 sẽ là form nhân bản
          * NHAnh(06/11/2022)
          */
-        employeeEdit(event, employee) {
+        employeeEdit(event, employee, value) {
+            this.titlePopup = "Sửa nhân viên";
+            this.isEdit = true;
+            if (value == 1) {
+                this.isEdit = false;
+                this.titlePopup = "Thêm mới nhân viên";
+            }
+
             this.popupStatus = !this.popupStatus;
             this.employeeEditItem = employee;
-            this.employeeEditItem.DateOfBirth = this.formatDate(
-                this.employeeEditItem.DateOfBirth
+            this.employeeEditItem.DateofBirth = this.formatDate(
+                this.employeeEditItem.DateofBirth
             );
             this.employeeEditItem.IdentityDate = this.formatDate(
                 this.employeeEditItem.IdentityDate
@@ -389,6 +497,24 @@ export default {
         onClickAway(event, emp) {
             emp.closeOpenDelete = false;
         },
+
+        /**
+         * Thực hiện đóng mở Toast thêm nhân viên
+         * Author: NHAnh(06/11/2022)
+         */
+        openToastAdd(data) {
+            debugger;
+            this.$emit("openToastAdd", data);
+        },
+
+        /**
+         * Clear danh sách IP xóa
+         */
+        clearListDelete() {
+            this.checkAll = false;
+            this.listEmployee.map(e => (e.isChecked = false));
+            this.listClicked = [];
+        },
     },
 };
 </script>
@@ -403,7 +529,7 @@ export default {
 .m-table tr {
     cursor: pointer;
     height: 48px;
-    border-bottom: 1px solid #bbbbbb;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .thead__so-cmnd {
@@ -435,7 +561,7 @@ export default {
 }
 
 .m-table tbody tr:hover td {
-    background-color: #e9ebee;
+    background-color: #f8f8f8;
     cursor: pointer;
     z-index: 0;
 }
@@ -456,69 +582,78 @@ export default {
     font-weight: 600;
     cursor: pointer;
 }
+
 /* Stiky */
 .m-table thead {
     height: 48px;
-    background-color: #edeef2;
-    border-bottom: 1px solid #bbbbbb;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #e0e0e0;
     position: sticky;
     top: -1px;
     z-index: 2;
 }
+
 /* Cột 1 */
 .m-table thead th:first-child {
     width: 24px !important;
-    background-color: #edeef2;
+    background-color: #f5f5f5;
     position: sticky;
     top: -1px;
     left: 0px;
     z-index: 3;
 }
+
 .m-table tbody td:first-child {
     background-color: #fff;
     position: sticky;
     left: 0px;
     z-index: 1;
 }
+
 /* Cột 2 */
 .m-table thead th:nth-child(2) {
     width: 160px !important;
-    background-color: #edeef2;
+    background-color: #f5f5f5;
     position: sticky;
     top: -1px;
     left: 50px;
     z-index: 3;
 }
+
 .m-table tbody td:nth-child(2) {
     background-color: #fff;
     position: sticky;
     left: 50px;
     z-index: 1;
 }
+
 /* Cột 3 */
 .m-table thead th:nth-child(3) {
     width: 160px !important;
-    background-color: #edeef2;
+    background-color: #f5f5f5;
     position: sticky;
     top: -1px;
     left: 176px;
     z-index: 3;
 }
+
 .m-table tbody td:nth-child(3) {
     background-color: #fff;
     position: sticky;
     left: 176px;
     z-index: 1;
 }
+
 /* Cột chức năng */
 .m-table thead th:last-child {
-    background-color: #edeef2;
+    background-color: #f5f5f5;
     position: sticky;
     top: -1px;
     right: 0px;
     z-index: 3;
     width: 120px;
 }
+
 .m-table tbody td:last-child {
     /* background-color: #fff; */
     position: sticky;
@@ -532,12 +667,14 @@ export default {
     z-index: 999;
     border: 1px solid transparent;
 }
+
 .icon-update-focus {
     border: 1px solid #0075c0;
 }
+
 .list-update {
     position: absolute;
-    width: 100;
+    width: 120 !important;
     height: 50;
     top: 22px;
     right: 0;
@@ -545,56 +682,70 @@ export default {
     border-radius: 4px;
     background-color: #fff;
 }
+
 .show {
     display: block;
 }
+
 .list-update ul {
     list-style-type: none;
     width: 100px;
     background-color: #fff;
     z-index: 10;
 }
+
 .list-update ul li {
     height: 24px;
     line-height: 24px;
     text-align: left;
-    padding-left: 8px;
+    padding-left: 16px;
     padding-top: 4px;
     padding-bottom: 4px;
     background-color: #fff;
 }
+
 .list-update ul li:hover {
     background-color: #e8e9ed;
     color: #409330;
 }
+
 .table-header-right {
     display: flex;
     align-items: center;
     padding-right: 8px;
 }
+
 .table-header-left {
     display: flex;
     align-items: center;
 }
+
 .btn-delete {
-    background-color: red;
+    background-color: #e81e1e;
 }
-.overlay-delete {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    background-color: red;
-    width: 100%;
-    height: 100%;
+
+.btn-delete:hover {
+    background-color: #eb3333;
 }
+
+.btn-delete:focus {
+    background-color: #e81e1e;
+}
+
 .hadData {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 46px;
 }
+
 .hadData b {
     font-size: 24px;
+}
+
+.lable-unchecked {
+    color: #e61d1d;
+    cursor: pointer;
+    font-weight: 400;
 }
 </style>
