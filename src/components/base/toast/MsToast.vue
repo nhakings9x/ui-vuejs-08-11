@@ -2,22 +2,15 @@
     <div class="m-toast">
         <div class="m-toast-main" :class="{ 'm-toast-main-error': isError }">
             <div class="left-toast" v-if="!isError">
-                <div class="icon-succses ml-16 mr-16"></div>
-                <div class="toast-content">
-                    <b for="" class="title-toast">Thành công!</b>
-                    <label for=""
-                        >Bạn đã {{ toastAct }} thành công nhân viên!</label
-                    >
-                </div>
+                <div class="icon-succses ml-16 mr-8"></div>
+                <!-- <div class="toast-content"> -->
+                <b for="" class="title-toast">Thành công!</b>
+                <label for="">
+                    &nbsp;Bạn đã {{ toastAct }} thành công nhân viên!</label
+                >
+                <!-- </div> -->
             </div>
-            <div class="left-toast" v-if="isError">
-                <div class="icon-delete ml-16 mr-16"></div>
-                <div class="toast-content">
-                    <b for="" class="title-toast">Thất bại!</b>
-                    <label for="">Thao tác thất bại, vui lòng thử lại!</label>
-                </div>
-            </div>
-            <div class="icon-close mr-8" @click="closeOpenToast()"></div>
+            <div class="icon-close-clone mr-16" @click="closeOpenToast()"></div>
         </div>
     </div>
 </template>
@@ -39,23 +32,27 @@ export default {
     },
 };
 </script>
-<style>
+<style scoped>
 .m-toast {
     position: fixed;
-    right: 32px;
-    bottom: 32px;
+    top: 112px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* display: flex; */
+    /* width: 100%; */
+    /* justify-content: center; */
     z-index: 99999999;
-    display: block;
 }
 .m-toast-main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 400px;
-    height: 80px;
-    background-color: #eef8ec;
-    border-left: 5px solid #50b83c;
+    min-width: 450px;
+    max-width: 650px;
+    height: 56px;
+    background-color: #fff;
     border-radius: 4px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     animation: toastLeft ease 0.3s, toastOut linear 1s 3s forwards;
 }
 .m-toast-main-error {
@@ -72,7 +69,9 @@ export default {
 }
 .title-toast {
     display: block;
-    font-size: 20px;
+    color: #50b83c;
+    font-weight: 700;
+    font-size: 13px;
 }
 @keyframes toastLeft {
     from {

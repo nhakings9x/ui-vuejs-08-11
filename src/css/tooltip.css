@@ -56,27 +56,27 @@
     display: block;
 }
 /* Thu gọn sidebar */
-.tooltip__3-gach {
+.tooltip__sidebar {
     top: 30px;
     left: 0;
     width: 140px;
 }
-.tooltip__3-gach label div {
+.tooltip__sidebar label div {
     top: -5px;
 }
-.icon-3-gach:hover .tooltip__3-gach {
+.icon-sidebar:hover .tooltip__sidebar {
     display: block;
 }
 /* Mở rộng sidebar */
-.tooltip__3-gach-white {
+.tooltip__sidebar-white {
     top: 44px;
     left: 0;
     width: 140px;
 }
-.tooltip__3-gach-white label div {
+.tooltip__sidebar-white label div {
     top: -5px;
 }
-.icon-3-gach-white:hover .tooltip__3-gach-white {
+.icon-sidebar-white:hover .tooltip__sidebar-white {
     display: block;
 }
 /* Thông báo */

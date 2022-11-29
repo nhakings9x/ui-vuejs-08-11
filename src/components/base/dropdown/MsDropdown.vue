@@ -60,7 +60,7 @@
 export default {
     data() {
         return {
-            inputValue: 10,
+            inputValue: 20,
             dropdownId: "",
             modelInput: "",
             dataShow: false,
@@ -103,8 +103,12 @@ export default {
         value: {},
     },
     created() {
-        // document.addEventListener("focusin", this.focusChanged);
+        // tạo sự kiện phím tắt;
         window.addEventListener("keydown", this.listenerKeydown);
+    },
+    beforeUnmount() {
+        // Hủy sự kiện phím tắt
+        window.removeEventListener("keyup", this.listenerKeyup);
     },
     watch: {
         /**
@@ -120,6 +124,11 @@ export default {
                 console.log(err);
             }
         },
+
+        /**
+         * gán giá trị dropdown khi khởi tạo
+         * author: NHAnh (06/11/2022)
+         */
         listDropdownItem(value) {
             try {
                 if (value) {
@@ -131,7 +140,7 @@ export default {
                     } else if (!this.edit) {
                         this.inputValue = this.defaultValue;
                     } else {
-                        this.inputValue = 10;
+                        this.inputValue = 20;
                     }
                 }
             } catch (err) {
@@ -142,6 +151,7 @@ export default {
     methods: {
         /**
          * Kiểm tra có focus không
+         * author: NHAnh(23/11/2022)
          */
         onKeyDown(e) {
             if (e.key == "Enter") {
@@ -151,8 +161,10 @@ export default {
                 this.dataShow = !this.dataShow;
             }
         },
+
         /**
          * Bắt sự kiện khi key down
+         * author: NHAnh(23/11/2022)
          */
         listenerKeydown(e) {
             if (this.dataShow) {
@@ -187,6 +199,7 @@ export default {
                 }
             }
         },
+
         /**
          * click lấy giá trị item gán vào ô input
          * author: NHAnh(06/11/2022)

@@ -1,4 +1,4 @@
-.icon-tong-quan {
+.icon-overview {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -33px -1587px;
     width: 18px;
@@ -6,105 +6,98 @@
     opacity: 0.7;
 }
 
-.icon-tien-mat {
+.icon-money {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -78px -1588px;
     width: 14px;
     height: 18px;
     opacity: 0.7;
 }
-.icon-hop-dong {
+.icon-contract {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -121px -1590px;
     width: 16px;
     height: 16px;
     opacity: 0.7;
 }
-.icon-mua-hang {
+.icon-purchase {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -165px -1589px;
     width: 16px;
     height: 18px;
     opacity: 0.7;
 }
-.icon-ban-hang {
+.icon-sell {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -206px -1588px;
     width: 20px;
     height: 14px;
     opacity: 0.7;
 }
-.icon-qlhd {
+.icon-invoice {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -254px -1589px;
     width: 14px;
     height: 17px;
     opacity: 0.7;
 }
-.icon-kho {
+.icon-warehouse {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -294px -1589px;
     width: 18px;
     height: 17px;
     opacity: 0.7;
 }
-.icon-cong-dung-cu {
+.icon-tools {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -339px -1590px;
     width: 18px;
     height: 17px;
     opacity: 0.7;
 }
-.icon-tai-san-co-dinh {
-    background-image: url(../assets//img//Sprites.64af8f61.svg);
-    background-position: -382px -1589px;
-    width: 17px;
-    height: 18px;
-    opacity: 0.7;
-}
-.icon-thue {
+.icon-tax {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -427px -1591px;
     width: 16px;
     height: 16px;
     opacity: 0.7;
 }
-.icon-gia-thanh {
+.icon-price {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -471px -1590px;
     width: 17px;
     height: 17px;
     opacity: 0.7;
 }
-.icon-tong-hop {
+.icon-synthetic {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -514px -1590px;
     width: 15px;
     height: 16px;
     opacity: 0.7;
 }
-.icon-ngan-sach {
+.icon-budget {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -427px -1664px;
     width: 16px;
     height: 16px;
     opacity: 0.7;
 }
-.icon-bao-cao {
+.icon-report {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -552px -1593px;
     width: 14px;
     height: 13px;
     opacity: 0.7;
 }
-.icon-pttc {
+.icon-financial-analysis {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -251px -1667px;
     width: 17px;
     height: 14px;
     opacity: 0.7;
 }
-.icon-9-cham {
+.icon-sidebar-header {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -428px -92px;
     width: 16px;
@@ -113,7 +106,7 @@
     cursor: pointer;
 }
 
-.icon-3-gach {
+.icon-sidebar {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -847px -35px;
     width: 16px;
@@ -128,12 +121,6 @@
     width: 14px;
     height: 8px;
 }
-/* .icon-down-dd {
-    background-image: url(../assets//img//Sprites.64af8f61.svg);
-    background-position: -1129px -365px;
-    width: 36px;
-    height: 36px;
-} */
 .icon-bell {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -788px -30px;
@@ -203,9 +190,9 @@
 }
 .icon-succses {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
-    background-position: -990px -462px;
-    width: 36px;
-    height: 36px;
+    background-position: -1602px -258px;
+    width: 20px;
+    height: 20px;
 }
 
 .icon-warning {
@@ -237,6 +224,13 @@
     cursor: pointer;
     position: relative;
 }
+.icon-close-clone {
+    background-image: url(../assets//img//Sprites.64af8f61.svg);
+    background-position: -84px -316px;
+    width: 8px;
+    height: 8px;
+    cursor: pointer;
+}
 .icon-right {
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -84px -361px;
@@ -255,7 +249,8 @@
     cursor: pointer;
     background-color: unset;
 }
-.icon-3-gach-white {
+.icon-sidebar-white {
+    margin-left: 5px;
     display: none;
     background-image: url(../assets//img//Sprites.64af8f61.svg);
     background-position: -316px -37px;

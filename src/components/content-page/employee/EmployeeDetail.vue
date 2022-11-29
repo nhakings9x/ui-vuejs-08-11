@@ -13,7 +13,7 @@
                                 class="popup-checkbox"
                                 tabindex="22"
                             />
-                            <span>Là khách hàng</span>
+                            <span>{{ employeeDetail.IS_CLIENT }}</span>
                         </label>
                         <label for="">
                             <input
@@ -23,7 +23,7 @@
                                 tabindex="23"
                                 @blur="tabOrder"
                             />
-                            <span>Là nhà cung cấp</span>
+                            <span>{{ employeeDetail.IS_SUPPLIER }}</span>
                         </label>
                     </div>
                 </div>
@@ -31,15 +31,19 @@
                     <div class="icon-help mr-8">
                         <div class="tooltip tooltip__help">
                             <label for=""
-                                >Trợ giúp (F1)
+                                >{{ tooltipResource.HELP }}
                                 <div></div
                             ></label>
                         </div>
                     </div>
-                    <div id="js-close" class="icon-close" @click="closePopup()">
+                    <div
+                        id="js-close"
+                        class="icon-close"
+                        @click="closePopup(1)"
+                    >
                         <div class="tooltip tooltip__close">
                             <label for=""
-                                >Đóng (ESC)
+                                >{{ tooltipResource.CLOSE }}
                                 <div></div
                             ></label>
                         </div>
@@ -53,10 +57,12 @@
                             <div class="form-popup">
                                 <div class="ma-nhan-vien">
                                     <form-control
-                                        labelForm="Mã"
+                                        :labelForm="employeeDetail.EMPLOYEE_ID"
                                         required
                                         @dataInput="dataForm"
-                                        formControlName="EmployeeCode"
+                                        :formControlName="
+                                            formName.EMPLOYEE_CODE
+                                        "
                                         :validateForm="validate.code"
                                         :errorText="errors.code"
                                         :valueInput="employee.EmployeeCode"
@@ -67,14 +73,18 @@
                                         @blur="validateFormCode"
                                     ></form-control>
                                 </div>
-                                <div class="form-group ten-nhan-vien">
+                                <div class="form-group employee-name">
                                     <form-control
-                                        labelForm="Tên"
+                                        :labelForm="
+                                            employeeDetail.EMPLOYEE_NAME
+                                        "
                                         required
                                         @dataInput="dataForm"
                                         :validateForm="validate.name"
                                         :errorText="errors.name"
-                                        formControlName="EmployeeName"
+                                        :formControlName="
+                                            formName.EMPLOYEE_NAME
+                                        "
                                         :tabindex="2"
                                         :valueInput="employee.EmployeeName"
                                         @blur="validateFormName"
@@ -82,22 +92,24 @@
                                 </div>
                             </div>
                             <div class="form-popup">
-                                <div class="form-group don-vi">
+                                <div class="form-group department">
                                     <label for=""
-                                        >Đơn vị
+                                        >{{ employeeDetail.DEPARTMENT_NAME }}
                                         <span class="color-red">*</span></label
                                     >
                                     <ms-dropdown
                                         :listDropdownItem="listDepartment"
-                                        defaultValue="Chọn đơn vị"
+                                        :defaultValue="
+                                            employeeDetail.CHOOSE_UNIT
+                                        "
                                         downData
                                         :dpName="employee.DepartmentID"
                                         :tabindex="3"
                                         :validate="validate.DepartmentId"
                                         @dropdown-value="dpId"
                                         :edit="edit"
-                                        @validateDD="validateForm"
-                                        @blur="validateForm"
+                                        @validateDD="validateDP"
+                                        @blur="validateDP"
                                     ></ms-dropdown>
                                     <label
                                         for=""
@@ -109,13 +121,17 @@
                                 </div>
                             </div>
                             <div class="form-popup">
-                                <div class="chuc-danh">
+                                <div class="job-position">
                                     <form-control
-                                        labelForm="Chức danh"
+                                        :labelForm="
+                                            employeeDetail.JOB_POSITION_NAME
+                                        "
                                         @dataInput="dataForm"
                                         :validateForm="validate.JobPositionName"
                                         :errorText="errors.JobPositionName"
-                                        formControlName="JobPositionName"
+                                        :formControlName="
+                                            formName.JOB_POSITION_NAME
+                                        "
                                         :tabindex="4"
                                         :valueInput="employee.JobPositionName"
                                     ></form-control>
@@ -124,8 +140,10 @@
                         </div>
                         <div class="employee-form__right">
                             <div class="form-popup">
-                                <div class="form-group ngay-sinh">
-                                    <label for="">Ngày sinh</label>
+                                <div class="form-group date-of-birth">
+                                    <label for="">{{
+                                        employeeDetail.DATE_OF_BIRTH
+                                    }}</label>
                                     <input
                                         type="date"
                                         :class="[
@@ -136,19 +154,20 @@
                                         ]"
                                         tabindex="5"
                                         v-model="employee.DateofBirth"
-                                        @blur="validateForm"
+                                        @blur="validateDate(1)"
                                     />
                                     <label for="" class="error_text">{{
                                         errors.DateOfBirth
                                     }}</label>
                                 </div>
-                                <div class="form-group gioi-tinh">
-                                    <label for="">Giới tính</label>
+                                <div class="form-group gender">
+                                    <label for="">{{
+                                        employeeDetail.GENDER
+                                    }}</label>
                                     <div class="m-flex aline-item-center">
                                         <input
-                                            class="input-gioi-tinh"
+                                            class="input-gender"
                                             type="radio"
-                                            id="Nam"
                                             name="fav_language"
                                             :value="0"
                                             tabindex="6"
@@ -158,13 +177,13 @@
                                          
                                         <label
                                             for="Nam"
-                                            class="lable-gioi-tinh pb-0"
-                                            >Nam</label
+                                            class="lable-gender pb-0"
+                                            >{{ employeeDetail.MALE }}</label
                                         ><br />
                                          
 
                                         <input
-                                            class="input-gioi-tinh"
+                                            class="input-gender"
                                             type="radio"
                                             id="Nam"
                                             name="fav_language"
@@ -175,17 +194,15 @@
                                         />
 
                                          
-                                        <label
-                                            for="Nữ"
-                                            class="lable-gioi-tinh pb-0"
-                                            >Nữ</label
+                                        <label class="lable-gender pb-0">{{
+                                            employeeDetail.FEMALE
+                                        }}</label
                                         ><br />
                                          
 
                                         <input
-                                            class="input-gioi-tinh"
+                                            class="input-gender"
                                             type="radio"
-                                            id="Nam"
                                             name="fav_language"
                                             :value="2"
                                             tabindex="8"
@@ -194,34 +211,41 @@
                                         />
 
                                          
-                                        <label
-                                            for="Khác"
-                                            class="lable-gioi-tinh pb-0"
-                                            >Khác</label
-                                        >
+                                        <label class="lable-gender pb-0">{{
+                                            employeeDetail.OTHER
+                                        }}</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-popup">
-                                <div class="so-cmnd">
+                                <div class="identity-number">
                                     <form-control
-                                        labelForm="Số CMND"
-                                        titleLable="Số chứng minh nhân dân"
+                                        :labelForm="
+                                            employeeDetail.IDENTITY_NUMBER
+                                        "
+                                        :titleLable="
+                                            employeeDetail.IDENTITY_NUMBER_TITLE
+                                        "
                                         @dataInput="dataForm"
                                         :validateForm="validate.IdentityNumber"
                                         :errorText="errors.IdentityNumber"
-                                        formControlName="IdentityNumber"
+                                        :formControlName="
+                                            formName.IDENTITY_NUMBER
+                                        "
                                         :valueInput="employee.IdentityNumber"
                                         :tabindex="9"
-                                        @blur="validateForm"
+                                        @blur="validateNumber(1)"
                                     ></form-control>
                                 </div>
-                                <div class="form-group ngay-cap">
-                                    <label for="">Ngày cấp</label>
+                                <div class="form-group identity-date">
+                                    <label for="">{{
+                                        employeeDetail.IDENTITY_DATE
+                                    }}</label>
                                     <input
                                         type="date"
                                         class="m-input required"
                                         v-model="employee.IdentityDate"
+                                        @blur="validateDate(2)"
                                         tabindex="10"
                                     />
                                     <label for="" class="error_text">{{
@@ -230,13 +254,17 @@
                                 </div>
                             </div>
                             <div class="form-popup">
-                                <div class="noi-cap">
+                                <div class="iti-adress">
                                     <form-control
-                                        labelForm="Nơi cấp"
+                                        :labelForm="
+                                            employeeDetail.IDENTITY_PLACE
+                                        "
                                         @dataInput="dataForm"
                                         :validateForm="validate.IdentityPlace"
                                         :errorText="errors.IdentityPlace"
-                                        formControlName="IdentityPlace"
+                                        :formControlName="
+                                            formName.IDENTITY_PLACE
+                                        "
                                         :valueInput="employee.IdentityPlace"
                                         :tabindex="11"
                                     ></form-control>
@@ -246,11 +274,11 @@
                     </div>
                     <div class="content-employee__contact">
                         <div class="form-popup">
-                            <div class="dia-chi">
+                            <div class="address">
                                 <form-control
-                                    labelForm="Địa chỉ"
+                                    :labelForm="employeeDetail.ADRESS"
                                     @dataInput="dataForm"
-                                    formControlName="Adress"
+                                    :formControlName="formName.ADRESS"
                                     :validateForm="validate.Adress"
                                     :errorText="errors.Adress"
                                     :valueInput="employee.Adress"
@@ -259,76 +287,80 @@
                             </div>
                         </div>
                         <div class="form-popup">
-                            <div class="di-dong">
+                            <div class="telephone-number">
                                 <form-control
-                                    labelForm="ĐT di động"
-                                    titleLable="Điện thoại di động"
+                                    :labelForm="employeeDetail.PHONE_NUMBER"
+                                    :titleLable="
+                                        employeeDetail.PHONE_NUMBER_TITLE
+                                    "
                                     @dataInput="dataForm"
                                     :validateForm="validate.PhoneNumber"
                                     :errorText="errors.PhoneNumber"
-                                    formControlName="PhoneNumber"
+                                    :formControlName="formName.PHONE_NUMBER"
                                     :valueInput="employee.PhoneNumber"
-                                    @blur="validateForm"
+                                    @blur="validateNumber(2)"
                                     :tabindex="13"
                                 ></form-control>
                             </div>
-                            <div class="di-dong">
+                            <div class="telephone-number">
                                 <form-control
-                                    labelForm="ĐT cố định"
-                                    titleLable="Điện thoại cố định"
+                                    :labelForm="employeeDetail.TELEPHONE_NUMBER"
+                                    :titleLable="
+                                        employeeDetail.TELEPHONE_NUMBER_TITLE
+                                    "
                                     @dataInput="dataForm"
                                     :validateForm="validate.TelephoneNumber"
                                     :errorText="errors.TelephoneNumber"
-                                    formControlName="TelephoneNumber"
+                                    :formControlName="formName.TELEPHONE_NUMBER"
                                     :valueInput="employee.TelephoneNumber"
-                                    @blur="validateForm"
+                                    @blur="validateNumber(3)"
                                     :tabindex="14"
                                 ></form-control>
                             </div>
-                            <div class="di-dong">
+                            <div class="telephone-number">
                                 <form-control
-                                    labelForm="Email"
+                                    :labelForm="employeeDetail.EMAIL"
                                     @dataInput="dataForm"
                                     :validateForm="validate.Email"
                                     :errorText="errors.Email"
-                                    formControlName="Email"
+                                    :formControlName="formName.EMAIL"
                                     :valueInput="employee.Email"
-                                    @blur="validateForm"
+                                    @blur="ValidateEmail()"
                                     :tabindex="15"
                                 ></form-control>
                             </div>
                         </div>
                         <div class="form-popup">
-                            <div class="di-dong">
+                            <div class="telephone-number">
                                 <form-control
-                                    labelForm="Tài khoản ngân hàng"
+                                    :labelForm="employeeDetail.BANK_NUMBER"
                                     @dataInput="dataForm"
                                     :validateForm="validate.BankNumber"
                                     :errorText="errors.BankNumber"
-                                    formControlName="BankNumber"
+                                    :formControlName="formName.BANK_NUMBER"
                                     :valueInput="employee.BankNumber"
-                                    @blur="validateForm"
+                                    @blur="validateNumber(4)"
                                     :tabindex="16"
                                 ></form-control>
                             </div>
-                            <div class="form-group di-dong">
+                            <div class="form-group telephone-number">
                                 <form-control
-                                    labelForm="Tên ngân hàng"
+                                    :labelForm="employeeDetail.BANK_NAME"
                                     @dataInput="dataForm"
                                     :validateForm="validate.BankName"
                                     :errorText="errors.BankName"
-                                    formControlName="BankName"
+                                    :formControlName="formName.BANK_NAME"
                                     :valueInput="employee.BankName"
                                     :tabindex="17"
                                 ></form-control>
                             </div>
-                            <div class="form-group di-dong">
+                            <div class="form-group telephone-number">
                                 <form-control
-                                    labelForm="Chi nhánh"
+                                    :labelForm="employeeDetail.BANK_BRANCH"
                                     @dataInput="dataForm"
                                     :validateForm="validate.BankBranch"
                                     :errorText="errors.BankBranch"
-                                    formControlName="BankBranch"
+                                    :formControlName="formName.BANK_BRANCH"
                                     :valueInput="employee.BankBranch"
                                     :tabindex="18"
                                 ></form-control>
@@ -338,23 +370,23 @@
                 </div>
                 <div class="m-popup__footer">
                     <ms-button
-                        btnText="Hủy"
+                        :btnText="buttonSrc.CANCEL"
                         btnExtra
-                        @click="closePopup()"
+                        @click="closePopup(1)"
                         :tabindex="21"
                     ></ms-button>
                     <div class="m-popup__footer-left">
                         <ms-button
-                            btnText="Cất"
+                            :btnText="buttonSrc.SAVE"
                             :btnExtra="!edit"
-                            @click="addEmployee(0)"
+                            @click="addEmployee()"
                             :tabindex="20"
                         ></ms-button>
                         <ms-button
                             class="ml-8"
-                            v-show="!edit"
-                            btnText="Cất và thêm"
-                            @click="addEmployee(1)"
+                            v-if="!edit"
+                            :btnText="buttonSrc.SAVE_AND_ADD"
+                            @click="addEmployee(saveSrc.SAVE_AND_ADD)"
                             :tabindex="19"
                         ></ms-button>
                     </div>
@@ -375,9 +407,12 @@
             :warning="isWarningStatus"
             :errorCode="errorCode"
             :warningCode="dataDialog.show"
+            :errorText="errorText"
         ></dialog-warning>
         <dialog-update
             v-if="dialogEdit"
+            :edit="edit"
+            @isAdd="addEmployee(0)"
             @close-popup-edit="closePopup"
             @isUpdate="isEditEmployee"
             @coDialogUpdate="coDialogUpdate"
@@ -385,14 +420,17 @@
     </div>
 </template>
 <script>
-import MsButton from "../button/MsButton.vue";
-import MsDropdown from "../dropdown/MsDropdown.vue";
-import FormControl from "../form-control/FormControl.vue";
+import MsButton from "../../base/button/MsButton.vue";
+import MsDropdown from "../../base/dropdown/MsDropdown.vue";
+import FormControl from "../../base/form-control/FormControl.vue";
 import axios from "axios";
+import DialogWarning from "../../base/dialog/DialogWarning.vue";
+import DialogUpdate from "../../base/dialog/DialogUpdate";
+import MsToast from "../../base/toast/MsToast.vue";
 import { BASE_URL, DEPARTMENT_URL } from "../../../constans/constans";
-import DialogWarning from "../dialog/dialogWarning.vue";
-import DialogUpdate from "../dialog/dialogUpdate.vue";
-import MsToast from "../toast/MsToast.vue";
+import { ERRORS, EMPLOYEE } from "../../../constans/resource";
+import { EMPLOYEE_DETAIL, TOOLTIP, MS_BUTTON } from "@/constans/layoutResource";
+import { SAVE } from "@/constans/enums";
 
 export default {
     components: {
@@ -406,61 +444,11 @@ export default {
     data() {
         return {
             // Thông tin nhân viên
-            employee: {
-                EmployeeCode: null,
-                EmployeeName: null,
-                DepartmentID: null,
-                Gender: null,
-                JobPositionName: null,
-                DateofBirth: null,
-                IdentityNumber: null,
-                IdentityDate: null,
-                IdentityPlace: null,
-                Adress: null,
-                PhoneNumber: null,
-                TelephoneNumber: null,
-                Email: null,
-                BankNumber: null,
-                BankName: null,
-                BankBranch: null,
-            },
+            employee: {},
             // Trạng thái validate nhân viên
-            validate: {
-                code: false,
-                name: false,
-                DepartmentId: false,
-                JobPositionName: false,
-                DateOfBirth: false,
-                IdentityNumber: false,
-                IdentityDate: false,
-                IdentityPlace: false,
-                PhoneNumber: false,
-                TelephoneNumber: false,
-                Adress: false,
-                Email: false,
-                BankNumber: false,
-                BankName: false,
-                BankBranch: false,
-            },
+            validate: {},
             // Text cảnh báo nhân viên
-            errors: {
-                code: "",
-                name: "",
-                DepartmentId: "",
-                JobPositionName: "",
-                DateOfBirth: "",
-                IdentityDate: "",
-                IdentityNumber: "",
-                IdentityDate: "",
-                IdentityPlace: "",
-                PhoneNumber: "",
-                TelephoneNumber: "",
-                Adress: "",
-                Email: "",
-                BankNumber: "",
-                BankName: "",
-                BankBranch: "",
-            },
+            errors: {},
             // Danh sách đơn vị
             listDepartment: [],
             // Lấy id của đơn vị truyền xuống dropdown
@@ -483,6 +471,13 @@ export default {
 
             // Tabfocus
             tabForcus: false,
+            //error text
+            errorText: "",
+            employeeDetail: EMPLOYEE_DETAIL,
+            tooltipResource: TOOLTIP,
+            formName: EMPLOYEE,
+            buttonSrc: MS_BUTTON,
+            saveSrc: SAVE,
         };
     },
     props: [
@@ -497,20 +492,24 @@ export default {
     ],
     created() {
         this.getDepartmentList();
-        this.getEmployeeEditItem();
 
-        // gán giá trị cho employee
+        // gán giá trị cho employee khi có item sửa
         if (this.employeeEditItem) {
-            this.employee = this.employeeEditItem;
+            this.employee = { ...this.employeeEditItem };
         }
+
         // Lẫy mã mới
         if (!this.edit) {
-            this.newEmployeeCode();
+            this.getNewEmployeeCode();
         }
+
+        // tạo sự kiện phím tắt
         window.addEventListener("keyup", this.listenerKeyup);
     },
-    mounted() {
-        console.log(this.$refs.input.focus);
+
+    beforeUnmount() {
+        // Hủy sự kiện phím tắt
+        window.removeEventListener("keyup", this.listenerKeyup);
     },
 
     methods: {
@@ -519,83 +518,90 @@ export default {
          */
         listenerKeyup(e) {
             try {
-                debugger;
-                if (e.key == "Escape") {
-                    this.closePopup();
-                } else if (e.ctrlKey) {
-                    if (e.key == "F8") {
-                        this.addEmployee(1);
+                try {
+                    // ESC
+                    if (e.keyCode == 27) {
+                        this.closePopup(1);
+                    } else if (e.ctrlKey) {
+                        if (!this.edit) {
+                            // F8
+                            if (e.keyCode == 119) {
+                                this.addEmployee(1);
+                            }
+                        }
+                        // F9
+                        if (e.key == 120) {
+                            this.addEmployee(0);
+                        }
                     }
-                    if (e.key == "F9") {
-                        this.addEmployee(0);
-                    }
+                } catch (err) {
+                    console.log(err);
                 }
             } catch (err) {
                 console.log(err);
             }
         },
+
         /**
          * Bật tắt Dialog update và gửi trạng thái
          * author: NHAnh (31/10/2022)
          */
         coDialogUpdate() {
-            this.dialogEdit = !this.dialogEdit;
-        },
-
-        /**
-         * Lấy Nhân viên cần sửa
-         * author: NHAnh(31/10/2022)
-         */
-        getEmployeeEditItem() {
-            if (this.employeeEditItem) {
-                return (this.employee = this.employeeEditItem);
+            try {
+                this.dialogEdit = !this.dialogEdit;
+            } catch (err) {
+                console.log(err);
             }
         },
+
         /**
          * Lấy giá trị ô input gán vào employee
          * author: NHAnh (29/10/2022)
          */
         dataForm(data) {
-            switch (data.target) {
-                case "EmployeeCode":
-                    this.employee.EmployeeCode = data.value;
-                    break;
-                case "EmployeeName":
-                    this.employee.EmployeeName = data.value;
-                    break;
-                case "JobPositionName":
-                    this.employee.JobPositionName = data.value;
-
-                    break;
-                case "IdentityNumber":
-                    this.employee.IdentityNumber = data.value;
-                    break;
-                case "IdentityPlace":
-                    this.employee.IdentityPlace = data.value;
-                    break;
-                case "Adress":
-                    this.employee.Adress = data.value;
-                    break;
-                case "PhoneNumber":
-                    this.employee.PhoneNumber = data.value;
-                    break;
-                case "TelephoneNumber":
-                    this.employee.TelephoneNumber = data.value;
-                    break;
-                case "Email":
-                    this.employee.Email = data.value;
-                    break;
-                case "BankNumber":
-                    this.employee.BankNumber = data.value;
-                    break;
-                case "BankName":
-                    this.employee.BankName = data.value;
-                    break;
-                case "BankBranch":
-                    this.employee.BankBranch = data.value;
-                    break;
-                default:
-                // code block
+            try {
+                switch (data.target) {
+                    case EMPLOYEE.EMPLOYEE_CODE:
+                        this.employee.EmployeeCode = data.value;
+                        break;
+                    case EMPLOYEE.EMPLOYEE_NAME:
+                        this.employee.EmployeeName = data.value;
+                        break;
+                    case EMPLOYEE.JOB_POSITION_NAME:
+                        this.employee.JobPositionName = data.value;
+                        break;
+                    case EMPLOYEE.IDENTITY_NUMBER:
+                        this.employee.IdentityNumber = data.value;
+                        break;
+                    case EMPLOYEE.IDENTITY_PLACE:
+                        this.employee.IdentityPlace = data.value;
+                        break;
+                    case EMPLOYEE.ADRESS:
+                        this.employee.Adress = data.value;
+                        break;
+                    case EMPLOYEE.PHONE_NUMBER:
+                        this.employee.PhoneNumber = data.value;
+                        break;
+                    case EMPLOYEE.TELEPHONE_NUMBER:
+                        this.employee.TelephoneNumber = data.value;
+                        break;
+                    case EMPLOYEE.EMAIL:
+                        this.employee.Email = data.value;
+                        break;
+                    case EMPLOYEE.BANK_NUMBER:
+                        this.employee.BankNumber = data.value;
+                        break;
+                    case EMPLOYEE.BANK_NAME:
+                        this.employee.BankName = data.value;
+                        break;
+                    case EMPLOYEE.BANK_BRANCH:
+                        this.employee.BankBranch = data.value;
+                        break;
+                    default:
+                    // code block
+                }
+            } catch (err) {
+                console.log(err);
             }
         },
 
@@ -604,167 +610,308 @@ export default {
          * author: NHAnh (30/10/2022)
          */
         validateForm() {
-            let isValidate = true;
-            (this.validate = {
-                code: false,
-                name: false,
-                DepartmentId: false,
-                JobPositionName: false,
-                DateOfBirth: false,
-                IdentityNumber: false,
-                IdentityDate: false,
-                IdentityDate: false,
-                IdentityPlace: false,
-                PhoneNumber: false,
-                TelephoneNumber: false,
-                Adress: false,
-                Email: false,
-                BankNumber: false,
-                BankName: false,
-                BankBranch: false,
-            }),
-                (this.errors = {
-                    code: "",
-                    name: "",
-                    DepartmentId: "",
-                    JobPositionName: "",
-                    DateOfBirth: "",
-                    IdentityDate: "",
-                    IdentityNumber: "",
-                    IdentityDate: "",
-                    IdentityPlace: "",
-                    PhoneNumber: "",
-                    TelephoneNumber: "",
-                    Adress: "",
-                    Email: "",
-                    BankNumber: "",
-                    BankName: "",
-                    BankBranch: "",
-                }),
-                (this.errors.code = "");
-            if (!this.employee.EmployeeCode) {
-                this.validate.code = true;
-                this.errors.code = "Mã không được để trống";
-                isValidate = false;
-            }
-            if (!this.employee.EmployeeName) {
-                this.validate.name = true;
-                this.errors.name = "Tên không được để trống";
-                isValidate = false;
-            }
-            if (!this.employee.DepartmentID) {
-                this.validate.DepartmentId = true;
-                this.errors.DepartmentId =
-                    "Đơn vị nhân viên không được để trống";
-                isValidate = false;
-            }
-            if (this.validateTime(this.employee.DateofBirth)) {
-                this.validate.DateOfBirth = true;
-                this.errors.DateOfBirth = "Ngày sinh không hợp lệ";
-                isValidate = false;
-            }
+            try {
+                let isValidate = true;
+                this.validate = {};
+                this.errors = {};
+                if (!this.employee.EmployeeCode) {
+                    this.validate.code = true;
+                    this.errors.code = ERRORS.EMPLOYEECODE;
+                    isValidate = false;
+                }
+                if (!this.employee.EmployeeName) {
+                    this.validate.name = true;
+                    this.errors.name = ERRORS.EMPLOYEENAME;
+                    isValidate = false;
+                }
+                if (!this.employee.DepartmentID) {
+                    this.validate.DepartmentId = true;
+                    this.errors.DepartmentId = ERRORS.DEPARTMENTID;
+                    isValidate = false;
+                }
+                if (this.validateTime(this.employee.DateofBirth)) {
+                    this.validate.DateOfBirth = true;
+                    this.errors.DateOfBirth = ERRORS.DATEOFBIRTH;
+                    isValidate = false;
+                }
 
-            if (this.employee.IdentityNumber) {
-                if (!this.isNumber(this.employee.IdentityNumber)) {
-                    this.validate.IdentityNumber = true;
-                    this.errors.IdentityNumber = "Số CMND phải là số";
-                    isValidate = false;
+                if (this.employee.IdentityNumber) {
+                    if (!this.isNumber(this.employee.IdentityNumber)) {
+                        this.validate.IdentityNumber = true;
+                        this.errors.IdentityNumber = ERRORS.IDENTITYNUMBER;
+                        isValidate = false;
+                    }
                 }
-            }
-            if (this.employee.IdentityDate) {
-                if (this.validateTime(this.employee.IdentityDate)) {
-                    this.validate.IdentityDate = true;
-                    this.errors.IdentityDate = "Ngày cấp không hợp lệ";
-                    isValidate = false;
+                if (this.employee.IdentityDate) {
+                    if (this.validateTime(this.employee.IdentityDate)) {
+                        this.validate.IdentityDate = true;
+                        this.errors.IdentityDate = ERRORS.INDENTITYDATE;
+                        isValidate = false;
+                    }
                 }
-            }
 
-            if (this.employee.PhoneNumber) {
-                if (!this.isNumber(this.employee.PhoneNumber)) {
-                    this.validate.PhoneNumber = true;
-                    this.errors.PhoneNumber = "ĐT di động phải là số";
-                    isValidate = false;
+                if (this.employee.PhoneNumber) {
+                    if (!this.isNumber(this.employee.PhoneNumber)) {
+                        this.validate.PhoneNumber = true;
+                        this.errors.PhoneNumber = ERRORS.PHONENUMBER;
+                        isValidate = false;
+                    }
                 }
-            }
 
-            if (this.employee.TelephoneNumber) {
-                if (!this.isNumber(this.employee.TelephoneNumber)) {
-                    this.validate.TelephoneNumber = true;
-                    this.errors.TelephoneNumber = "ĐT cố định phải là số";
-                    isValidate = false;
+                if (this.employee.TelephoneNumber) {
+                    if (!this.isNumber(this.employee.TelephoneNumber)) {
+                        this.validate.TelephoneNumber = true;
+                        this.errors.TelephoneNumber = ERRORS.TELEPHONENUMBER;
+                        isValidate = false;
+                    }
                 }
-            }
-            if (this.employee.Email) {
-                if (!this.isEmail(this.employee.Email)) {
-                    this.validate.Email = true;
-                    this.errors.Email = "Email không đúng định dạng";
-                    isValidate = false;
+                if (this.employee.Email) {
+                    if (!this.isEmail(this.employee.Email)) {
+                        this.validate.Email = true;
+                        this.errors.Email = ERRORS.EMAIL;
+                        isValidate = false;
+                    }
                 }
-            }
-            if (this.employee.BankNumber) {
-                if (!this.isNumber(this.employee.BankNumber)) {
-                    this.validate.BankNumber = true;
-                    this.errors.BankNumber = "Tài khoản ngân hàng phải là số";
-                    isValidate = false;
+                if (this.employee.BankNumber) {
+                    if (!this.isNumber(this.employee.BankNumber)) {
+                        this.validate.BankNumber = true;
+                        this.errors.BankNumber = ERRORS.BANKNUMBER;
+                        isValidate = false;
+                    }
                 }
-            }
-            if (isValidate == false) {
-                return false;
-            } else {
-                return true;
+                if (isValidate == false) {
+                    this.tabForcus = true;
+                    return false;
+                } else {
+                    return true;
+                }
+            } catch (err) {
+                console.log(err);
             }
         },
 
         /**
-         * validate ô Mã và tên
+         * Validate Đơn vị
+         * Author: NHAnh(06/11/2022)
+         */
+        validateDP() {
+            try {
+                this.validate.DepartmentId = false;
+                this.errors.DepartmentId = "";
+                if (!this.employee.DepartmentID) {
+                    this.validate.DepartmentId = true;
+                    this.errors.DepartmentId = ERRORS.DEPARTMENTID;
+                } else {
+                    this.validate.DepartmentID = false;
+                    this.errors.DepartmentID = "";
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        },
+
+        /**
+         * Validate Email
+         * Author: NHAnh(06/11/2022)
+         */
+        ValidateEmail() {
+            try {
+                this.validate.Email = false;
+                this.errors.Email = "";
+                if (this.employee.Email) {
+                    if (!this.isEmail(this.employee.Email)) {
+                        this.validate.Email = true;
+                        this.errors.Email = ERRORS.EMAIL;
+                    } else {
+                        this.validate.Email = false;
+                        this.errors.Email = "";
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        },
+
+        /**
+         * Validate số ( 1: Số CMND, 2: Đt di động, 3: ĐT cố định, 4: tài khoản ngân hàng)
+         * author: NHAnh(06/11/2022)
+         */
+        validateNumber(value) {
+            try {
+                if (value == 1) {
+                    this.validate.IdentityNumber = false;
+                    this.errors.IdentityNumber = "";
+                    if (this.employee.IdentityNumber) {
+                        if (!this.isNumber(this.employee.IdentityNumber)) {
+                            this.validate.IdentityNumber = true;
+                            this.errors.IdentityNumber = ERRORS.IDENTITYNUMBER;
+                        }
+                    } else {
+                        this.validate.IdentityNumber = false;
+                        this.errors.IdentityNumber = "";
+                    }
+                } else if (value == 2) {
+                    this.validate.PhoneNumber = false;
+                    this.errors.PhoneNumber = "";
+                    if (this.employee.PhoneNumber) {
+                        if (!this.isNumber(this.employee.PhoneNumber)) {
+                            this.validate.PhoneNumber = true;
+                            this.errors.PhoneNumber = ERRORS.PHONENUMBER;
+                        }
+                    } else {
+                        this.validate.PhoneNumber = false;
+                        this.errors.PhoneNumber = "";
+                    }
+                } else if (value == 3) {
+                    this.validate.TelephoneNumber = false;
+                    this.errors.TelephoneNumber = "";
+                    if (this.employee.TelephoneNumber) {
+                        if (!this.isNumber(this.employee.TelephoneNumber)) {
+                            this.validate.TelephoneNumber = true;
+                            this.errors.TelephoneNumber =
+                                ERRORS.TELEPHONENUMBER;
+                        }
+                    } else {
+                        this.validate.TelephoneNumber = false;
+                        this.errors.TelephoneNumber = "";
+                    }
+                } else if (value == 4) {
+                    this.validate.BankNumber = false;
+                    this.errors.BankNumber = "";
+                    if (this.employee.BankNumber) {
+                        if (!this.isNumber(this.employee.BankNumber)) {
+                            this.validate.BankNumber = true;
+                            this.errors.BankNumber = ERRORS.BANKNUMBER;
+                        }
+                    } else {
+                        this.validate.BankNumber = false;
+                        this.errors.BankNumber = "";
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Valudate các ô ngày (1: Ngày sinh, 2: Ngày cấp)
+         * author: NHAnh(06/11/2022)
+         */
+        validateDate(value) {
+            try {
+                if (value == 1) {
+                    this.validate.DateOfBirth = false;
+                    this.errors.DateOfBirth = "";
+                    if (this.validateTime(this.employee.DateofBirth)) {
+                        this.validate.DateOfBirth = true;
+                        this.errors.DateOfBirth = ERRORS.DATEOFBIRTH;
+                    } else {
+                        this.validate.DateOfBirth = false;
+                        this.errors.DateOfBirth = "";
+                    }
+                } else if (value == 2) {
+                    this.validate.IdentityDate = false;
+                    this.errors.IdentityDate = "";
+                    if (this.employee.IdentityDate) {
+                        if (this.validateTime(this.employee.IdentityDate)) {
+                            this.validate.IdentityDate = true;
+                            this.errors.IdentityDate = ERRORS.INDENTITYDATE;
+                        } else {
+                            this.validate.IdentityDate = false;
+                            this.errors.IdentityDate = "";
+                        }
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        },
+
+        /**
+         * validate ô Mã
          * author: NHAnh(06/11/2022)
          */
         validateFormCode() {
-            this.tabForcus = false;
-            this.validate.code = false;
-            this.errors.code = "";
-            if (!this.employee.EmployeeCode) {
-                this.validate.code = true;
-                this.errors.code = "Mã không được để trống";
-                return false;
-            } else {
+            try {
+                this.tabForcus = false;
                 this.validate.code = false;
                 this.errors.code = "";
-                return true;
+                if (!this.employee.EmployeeCode) {
+                    this.validate.code = true;
+                    this.errors.code = ERRORS.EMPLOYEECODE;
+                    return false;
+                } else {
+                    this.validate.code = false;
+                    this.errors.code = "";
+                    return true;
+                }
+            } catch (err) {
+                console.log(err);
             }
         },
+
+        /**
+         * validate ô tên
+         * author: NHAnh(06/11/2022)
+         */
         validateFormName() {
-            this.validate.name = false;
-            this.errors.name = "";
-            if (!this.employee.EmployeeName) {
-                this.validate.name = true;
-                this.errors.name = "Tên không được để trống";
-                return false;
-            } else {
+            try {
                 this.validate.name = false;
                 this.errors.name = "";
-                return true;
+                if (!this.employee.EmployeeName) {
+                    this.validate.name = true;
+                    this.errors.name = ERRORS.EMPLOYEENAME;
+                    return false;
+                } else {
+                    this.validate.name = false;
+                    this.errors.name = "";
+                    return true;
+                }
+            } catch (err) {
+                console.log(err);
             }
         },
         /**
-         * Validate số, emmail, date
+         * Validate số,
          * author: NHAnh (30/10/2022)
          */
         isNumber(value) {
-            return /^-?\d+$/.test(value);
-        },
-        isEmail(email) {
-            let regex =
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return regex.test(email);
-        },
-        validateTime(dateTime) {
-            let today = new Date();
-            let dataInputDate = new Date(dateTime);
-            if (dataInputDate > today) {
-                return true;
+            try {
+                return /^-?\d+$/.test(value);
+            } catch (err) {
+                console.log(err);
             }
-            return false;
+        },
+
+        /**
+         * Validate emmail
+         * author: NHAnh (30/10/2022)
+         */
+        isEmail(email) {
+            try {
+                let regex =
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return regex.test(email);
+            } catch (err) {
+                console.log(err);
+            }
+        },
+
+        /**
+         * Validate date
+         * author: NHAnh (30/10/2022)
+         */
+        validateTime(dateTime) {
+            try {
+                let today = new Date();
+                let dataInputDate = new Date(dateTime);
+                if (dataInputDate > today) {
+                    return true;
+                }
+                return false;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -772,14 +919,16 @@ export default {
          * author: NHAnh (29/10/2022)
          */
         async getDepartmentList() {
-            await axios
-                .get(`${DEPARTMENT_URL}`)
-                .then(res => (this.listDepartment = res.data))
-                .catch(error => {
-                    console.log(error);
-                });
-
-            console.log(this.listDepartment);
+            try {
+                await axios
+                    .get(`${DEPARTMENT_URL}`)
+                    .then(res => (this.listDepartment = res.data))
+                    .catch(error => {
+                        console.log(error);
+                    });
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -787,15 +936,20 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         dpId(data) {
-            this.employee.DepartmentID = data.id;
+            try {
+                this.employee.DepartmentID = data.id;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
-         * Thêm mới nhân viên, sửa nhân viên
+         * Thêm mới nhân viên, sửa nhân viên (0: Cât, 1: Cất và thêm)
          * author: NHAnh (31/10.2022)
          */
         async addEmployee(value) {
             try {
+                this.validateForm();
                 if (this.validateForm()) {
                     if (this.edit) {
                         try {
@@ -807,61 +961,24 @@ export default {
                         const res = await axios
                             .post(`${BASE_URL}`, this.employee)
                             .then(res => {
-                                debugger;
-                                this.employee = {
-                                    EmployeeCode: null,
-                                    EmployeeName: null,
-                                    DepartmentId: null,
-                                    Gender: null,
-                                    JobPositionName: null,
-                                    DateofBirth: null,
-                                    IdentityNumber: null,
-                                    IdentityDate: null,
-                                    IdentityPlace: null,
-                                    Adress: null,
-                                    PhoneNumber: null,
-                                    TelephoneNumber: null,
-                                    Email: null,
-                                    BankNumber: null,
-                                    BankName: null,
-                                    BankBranch: null,
-                                };
-                                if (value == 0) {
-                                    this.reloadList();
-                                    this.$emit("onClose");
+                                this.employee = {};
+                                if (value == SAVE.SAVE_AND_ADD) {
+                                    this.getNewEmployeeCode();
                                 } else {
-                                    this.newEmployeeCode();
+                                    this.$emit("onClose");
                                 }
-                                this.tabForcus = true;
+                                this.reloadList();
+
                                 this.$emit("openToastAdd", true);
                             })
                             .catch(error => {
-                                console.log(error.response.data.UserMsg);
-                                if (
-                                    error.response.data.UserMsg ==
-                                    "Mã nhân viên đã tồn tại trong hệ thống"
-                                ) {
-                                    this.isWarningStatus = true;
-                                    this.errorCode = false;
-                                    this.isWarningDialog();
-                                    this.validate.code = true;
-                                    this.errors.code = "Mã đã tồn tại";
-                                } else if (
-                                    error.response.data.UserMsg ==
-                                    "Mã nhân viên phải kết thúc bằng số"
-                                ) {
-                                    (this.errorCode = true),
-                                        (this.isWarningStatus = false);
-                                    this.isWarningDialog();
-                                } else {
-                                    alert("Có lỗi xảy ra");
-                                }
+                                console.log(error.response);
+                                this.errorText = error.response.data.UserMsg;
+                                this.isWarningStatus = true;
+                                this.errorCode = false;
+                                this.isWarningDialog();
                             });
                     }
-                } else {
-                    this.errorCode = false;
-                    this.isWarningStatus = false;
-                    this.isWarningDialog();
                 }
             } catch (err) {
                 console.log(err);
@@ -881,17 +998,13 @@ export default {
                         this.employee
                     )
                     .then(res => {
-                        console.log(res);
                         me.$emit("onClose");
                         me.$emit("openToastEdit", true);
                         me.$emit("reloadData");
                     })
                     .catch(e => {
-                        me.errorCode = false;
-                        me.isWarningStatus = false;
-                        me.dataDialog.show = true;
+                        this.errorText = e.response.data.UserMsg;
                         me.isWarningDialog();
-                        console.log(e);
                     });
             } catch (err) {
                 console.log(err);
@@ -902,7 +1015,7 @@ export default {
          * Lấy mã nhân viên mới
          * author: NHAnh(05/11/2022)
          */
-        newEmployeeCode() {
+        getNewEmployeeCode() {
             try {
                 axios
                     .get(`${BASE_URL}/newEmployeeCode`)
@@ -920,18 +1033,23 @@ export default {
         isWarningDialog() {
             try {
                 this.isWarning = !this.isWarning;
+                this.tabForcus = true;
             } catch (err) {
                 console.log(err);
             }
         },
 
         /**
-         * Đóng Popup
+         * Đóng Popup. Nếu value = 1 tiền hành mở dialog edit, còn lại là đóng popup
          * author: NHAnh (31/10/2022)
          */
-        closePopup() {
+        closePopup(value) {
             try {
-                this.$emit("onClose");
+                if (value == 1) {
+                    this.dialogEdit = !this.dialogEdit;
+                } else {
+                    this.$emit("onClose");
+                }
             } catch (err) {
                 console.log(err);
             }
@@ -995,7 +1113,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: start;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
 }
 .m-popup__title-header label span {
     padding-left: 10px;
@@ -1063,57 +1181,57 @@ export default {
     font-weight: 400;
 }
 .ma-nhan-vien,
-.ngay-sinh {
+.date-of-birth {
     width: 40%;
     padding-right: 10px;
 }
-.ngay-sinh {
+.date-of-birth {
     padding-right: 12px;
 }
-.ten-nhan-vien,
-.gioi-tinh {
+.employee-name,
+.gender {
     width: 60%;
 }
-.don-vi,
-.chuc-danh,
-.noi-cap,
-.dia-chi {
+.department,
+.job-position,
+.iti-adress,
+.address {
     width: 100%;
 }
-.don-vi .combobox input {
+.department .combobox input {
     border-width: 1px;
     border-radius: 4px;
     border-color: #e6e6e6;
     border-style: solid;
 }
-.don-vi .combobox .combobox__data {
+.department .combobox .combobox__data {
     bottom: unset;
     top: calc(100% + 1px);
     z-index: 1;
 }
-.input-gioi-tinh {
+.input-gender {
     padding-right: 16px;
     width: 20px;
     height: 20px;
     accent-color: #50b83c;
 }
-.lable-gioi-tinh {
+.lable-gender {
     padding-right: 16px;
     padding-left: 8px;
     font-weight: 400 !important;
 }
-.so-cmnd {
+.identity-number {
     width: 60%;
     padding-right: 10px;
 }
-.ngay-cap {
+.identity-date {
     width: 40%;
 }
 .content-employee__contact {
     width: 100%;
     border-bottom: 1px solid #e6e6e6;
 }
-.di-dong {
+.telephone-number {
     width: calc(25% - 10px);
     padding-right: 10px;
 }

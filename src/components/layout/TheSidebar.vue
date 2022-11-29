@@ -1,80 +1,102 @@
 <template>
     <div :class="['m-sidebar', updateSidebar ? 'sidebar-toggle' : '']">
         <div class="m-sidebar__header">
-            <div class="icon-9-cham sidebar-hiden"></div>
+            <div class="icon-sidebar-header sidebar-hiden"></div>
             <div class="m-sidebar__logo sidebar-hiden"></div>
-            <b class="sidebar-hiden">KẾ TOÁN</b>
-            <div
-                id="mo-rong-side-bar"
-                class="icon-3-gach-white"
-                @click="openSidebar()"
-            >
-                <div class="tooltip tooltip__3-gach-white">
-                    <label for=""
-                        >Mở rộng Sidebar
-                        <div></div
-                    ></label>
+            <b class="sidebar-hiden">{{ listNameRouter.HEADER }}</b>
+            <div class="icon-sidebar-white" @click="openSidebar()">
+                <div
+                    class="tooltip tooltip__sidebar-white"
+                    style="background: #626570"
+                >
+                    <label for="">{{ tooltipSrc.EXPAND_SIDEBAR }}</label>
                 </div>
             </div>
         </div>
         <div class="m-sidebar__main">
             <div class="m-sidebar__menu">
                 <a class="m-sidebar__menu-item item-1">
-                    <div class="item-icon icon-tong-quan"></div>
-                    <div class="item-text sidebar-hiden">Tổng quan</div>
+                    <div class="item-icon icon-overview"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.OVERVIEW }}
+                    </div>
                 </a>
-                <a class="m-sidebar__menu-item item-2">
-                    <div class="item-icon icon-tien-mat"></div>
-                    <div class="item-text sidebar-hiden">Tiền mặt</div>
-                </a>
-                <a class="m-sidebar__menu-item item-3">
-                    <div class="item-icon icon-hop-dong"></div>
-                    <div class="item-text sidebar-hiden">Tiền gửi</div>
-                </a>
+                <router-link to="/" class="m-sidebar__menu-item item-2">
+                    <div class="item-icon icon-money"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.CASH }}
+                    </div>
+                </router-link>
+                <router-link to="/deposits" class="m-sidebar__menu-item item-3">
+                    <div class="item-icon icon-contract"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.DEPOSITS }}
+                    </div>
+                </router-link>
                 <a class="m-sidebar__menu-item item-4">
-                    <div class="item-icon icon-mua-hang"></div>
-                    <div class="item-text sidebar-hiden">Mua hàng</div>
+                    <div class="item-icon icon-purchase"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.PURCHASE }}
+                    </div>
                 </a>
                 <a class="m-sidebar__menu-item item-5">
-                    <div class="item-icon icon-ban-hang"></div>
-                    <div class="item-text sidebar-hiden">Bán hàng</div>
+                    <div class="item-icon icon-sell"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.SELL }}
+                    </div>
                 </a>
                 <a class="m-sidebar__menu-item item-6">
-                    <div class="item-icon icon-qlhd"></div>
-                    <div class="item-text sidebar-hiden">Quản lý hóa đơn</div>
+                    <div class="item-icon icon-invoice"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.INVOICE_MANAGEMENT }}
+                    </div>
                 </a>
                 <a class="m-sidebar__menu-item item-7">
-                    <div class="item-icon icon-kho"></div>
-                    <div class="item-text sidebar-hiden">Kho</div>
+                    <div class="item-icon icon-warehouse"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.WAREHOUSE }}
+                    </div>
                 </a>
                 <a class="m-sidebar__menu-item item-8">
-                    <div class="item-icon icon-cong-dung-cu"></div>
-                    <div class="item-text sidebar-hiden">Công cụ dụng cụ</div>
+                    <div class="item-icon icon-tools"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.TOOLS }}
+                    </div>
                 </a>
                 <a class="m-sidebar__menu-item item-9">
-                    <div class="item-icon icon-thue"></div>
-                    <div class="item-text sidebar-hiden">Thuế</div>
+                    <div class="item-icon icon-tax"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.TAX }}
+                    </div>
                 </a>
                 <a class="m-sidebar__menu-item item-10">
-                    <div class="item-icon icon-gia-thanh"></div>
-                    <div class="item-text sidebar-hiden">Giá thành</div>
+                    <div class="item-icon icon-price"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.PRICE }}
+                    </div>
                 </a>
                 <a class="m-sidebar__menu-item item-11">
-                    <div class="item-icon icon-tong-hop"></div>
-                    <div class="item-text sidebar-hiden">Tổng hợp</div>
+                    <div class="item-icon icon-synthetic"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.SYNTHETIC }}
+                    </div>
                 </a>
                 <a class="m-sidebar__menu-item item-12">
-                    <div class="item-icon icon-ngan-sach"></div>
-                    <div class="item-text sidebar-hiden">Ngân sách</div>
+                    <div class="item-icon icon-budget"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.BUDGET }}
+                    </div>
                 </a>
                 <a class="m-sidebar__menu-item item-13">
-                    <div class="item-icon icon-bao-cao"></div>
-                    <div class="item-text sidebar-hiden">Báo cáo</div>
+                    <div class="item-icon icon-report"></div>
+                    <div class="item-text sidebar-hiden">
+                        {{ listNameRouter.REPORT }}
+                    </div>
                 </a>
                 <a class="m-sidebar__menu-item item-14">
-                    <div class="item-icon icon-pttc"></div>
+                    <div class="item-icon icon-financial-analysis"></div>
                     <div class="item-text sidebar-hiden">
-                        Phân tích tài chính
+                        {{ listNameRouter.FINANCIAL_ANALYSIS }}
                     </div>
                 </a>
             </div>
@@ -82,10 +104,14 @@
     </div>
 </template>
 <script>
+import { SIDEBAR, TOOLTIP } from "@/constans/layoutResource";
+
 export default {
     data() {
         return {
             updateSidebar: null,
+            listNameRouter: SIDEBAR,
+            tooltipSrc: TOOLTIP,
         };
     },
     props: {},
@@ -154,6 +180,7 @@ export default {
 .m-sidebar__menu-item {
     display: flex;
     cursor: pointer !important;
+    text-decoration: none;
 
     /* width: 100%; */
     align-items: center;
@@ -162,6 +189,19 @@ export default {
     padding: 10px 12px;
     position: relative;
 }
+
+.router-link-active {
+    background-color: #777983;
+    opacity: 1;
+    border-radius: 4px;
+}
+.router-link-active .item-text {
+    color: #fff;
+}
+.router-link-active .item-icon {
+    opacity: 1;
+}
+
 .item-icon {
     padding-right: 12px;
 }
@@ -202,7 +242,7 @@ export default {
 .sidebar-toggle .m-sidebar__header .sidebar-hiden {
     display: none;
 }
-.sidebar-toggle .m-sidebar__header .icon-3-gach-white {
+.sidebar-toggle .m-sidebar__header .icon-sidebar-white {
     display: block;
 }
 .sidebar-toggle
@@ -221,6 +261,11 @@ export default {
     background-color: #38393d;
     z-index: 10;
 }
+
+.sidebar-toggle .m-sidebar__main .m-sidebar__menu .m-sidebar__menu-item div {
+    margin-left: 3px;
+}
+
 .sidebar-toggle
     .m-sidebar__main
     .m-sidebar__menu

@@ -5,13 +5,13 @@
                 <div class="content">
                     <div class="icon-warning"></div>
                     <div class="message-content">
-                        {{ dialogText() }}
+                        {{ errorText }}
                     </div>
                 </div>
                 <div class="content-footer">
                     <div class="content-footer-left">
                         <button class="m-btn" @click="isWarningDialog">
-                            Đồng ý
+                            {{ buttonSrc.YES }}
                         </button>
                     </div>
                 </div>
@@ -20,30 +20,35 @@
     </div>
 </template>
 <script>
+import { MS_BUTTON } from "@/constans/layoutResource";
 export default {
-    props: ["employeeCode", "warning", "errorCode", "warningCode"],
+    data() {
+        return {
+            buttonSrc: MS_BUTTON,
+        };
+    },
+    props: ["employeeCode", "warning", "errorCode", "warningCode", "errorText"],
+    created() {
+        // tạo sự kiện phím tắt
+        window.addEventListener("keyup", this.listenerKeyup);
+    },
+    beforeUnmount() {
+        // Hủy sự kiện phím tắt
+        window.removeEventListener("keyup", this.listenerKeyup);
+    },
     methods: {
         /**
-         * Hiển thị form cảnh báo với các trường hợp
-         * Author: NHAnh (06/11/2022)
+         * phím tắt dialog
+         * author: NHANh(20/11/2022)
          */
-        dialogText() {
+        listenerKeyup(e) {
             try {
-                // Cảnh báo khi trường Mã nhân viên bị trùng
-                if (this.warning) {
-                    return `Mã nhân viên '${this.employeeCode}' đã tồn tại trong hệ
-                            thông, vui lòng kiểm tra lại`;
-                    // Cảnh báo khi trùng mã nhân viên
-                } else if (this.errorCode) {
-                    return `Thông tin mã nhân viên không hợp lệ.`;
-                    // Cảnh báo khi sửa trùng mã
-                } else if (this.warningCode) {
-                    return `Có lỗi xảy ra vui lòng liên hệ Giảng viên để được hỗ trợ!`;
+                // Enter
+                if (e.keyCode == 13) {
+                    this.isWarningDialog();
                 }
-                // Cảnh báo khi thiếu thông tin nhân viên
-                return `Vui lòng điền đầy đủ và chính xác thông tin!`;
-            } catch (err) {
-                console.log(err);
+            } catch (error) {
+                console.log(error);
             }
         },
 

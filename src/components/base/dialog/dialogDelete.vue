@@ -10,27 +10,28 @@
                     <div class="icon-close" @click="oClDialogDelete"></div>
                 </div>
                 <div class="message-content">
-                    Bạn có chắc muốn xóa người dùng đã chọn không?
+                    {{ dialogSrc.IS_DELETE }}
                 </div>
                 <div class="content-footer">
                     <div class="mr-8">
                         <ms-button
-                            btnText="Không"
+                            :btnText="buttonSrc.NO"
                             btnExtra
                             @click="oClDialogDelete"
+                            :tabindex="2"
                         ></ms-button>
                     </div>
                     <div class="content-footer-left">
                         <ms-button
                             class="btnToastDelete"
-                            btnText="Có, xóa người dùng"
+                            :btnText="buttonSrc.DELETE"
                             @click="handleDelete(employeeID)"
+                            :tabindex="1"
                         ></ms-button>
                     </div>
                 </div>
             </div>
         </div>
-        <ms-loading v-show="isLoading"></ms-loading>
         <div class="overlay" @click="oClDialogDelete"></div>
     </div>
 </template>
@@ -38,12 +39,14 @@
 import axios from "axios";
 import MsButton from "../button/MsButton.vue";
 import { BASE_URL } from "../../../constans/constans";
+import { MS_BUTTON, DIALOG_TEXT } from "@/constans/layoutResource";
 
 export default {
     components: { MsButton },
     data() {
         return {
-            isLoading: false,
+            buttonSrc: MS_BUTTON,
+            dialogSrc: DIALOG_TEXT,
         };
     },
     props: [
@@ -54,9 +57,35 @@ export default {
         "listClicked",
         "isDeleteBatch",
     ],
+    created() {
+        // tạo sự kiện phím tắt
+        window.addEventListener("keyup", this.listenerKeyup);
+    },
+    beforeUnmount() {
+        // Hủy sự kiện phím tắt
+        window.removeEventListener("keyup", this.listenerKeyup);
+    },
     methods: {
         /**
-         * Thực hiện xóa nhân viên theo ID
+         * Phím tắt
+         * author: NHAnh (27/11/2022)
+         */
+        listenerKeyup(e) {
+            try {
+                // Enter
+                if (e.keyCode == 13) {
+                    this.handleDelete(this.employeeID);
+                    // ESC
+                } else if (e.keyCode == 27) {
+                    this.oClDialogDelete();
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        },
+
+        /**
+         * Thực hiện xóa nhân viên theo ID, xóa nhiều nhân viên
          * Author: NHAnh (06/11/2022)
          */
         async handleDelete(employee) {
@@ -87,18 +116,6 @@ export default {
                 }
             } catch (error) {
                 console.log(error);
-            }
-        },
-
-        /**
-         * Dừng loading
-         * Author: NHAnh (06/11/2022)
-         */
-        stopLoading(e) {
-            try {
-                this.isLoading = !this.isLoading;
-            } catch (err) {
-                console.log(err);
             }
         },
     },

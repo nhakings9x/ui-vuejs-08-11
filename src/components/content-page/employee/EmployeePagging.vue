@@ -1,11 +1,14 @@
 <template>
     <div class="m-main__pagging">
         <label for="" class="m-pagging__left"
-            >Tổng: <b>{{ totalRecord }}</b></label
+            >{{ employeeRouter.PAGGING.TOTAL_RECORDS }}:
+            <b>{{ totalRecord }}</b></label
         >
 
         <div class="m-pagging__right">
-            <label class="mr-8" for="">Số bản ghi/trang : </label>
+            <label class="mr-8" for="">{{
+                employeeRouter.PAGGING.PAGE_NUMBER_DATA
+            }}</label>
             <div id="combobox__pagging" class="combobox mr-16">
                 <div class="pagging-list">
                     <ms-dropdown
@@ -17,7 +20,8 @@
             </div>
 
             <label for="" class="pagging__label mr-16"
-                ><b> {{ updatePage }}</b> bản ghi</label
+                ><b> {{ updatePage }}</b>
+                {{ employeeRouter.PAGGING.TOTAL_PAGE }}</label
             >
 
             <button class="icon-left mr-16" @click="downPage()"></button>
@@ -26,7 +30,10 @@
     </div>
 </template>
 <script>
-import MsDropdown from "../base/dropdown/MsDropdown.vue";
+import MsDropdown from "../../base/dropdown/MsDropdown.vue";
+import { LIST_PAGGING } from "@/constans/resource";
+import { EMPLOYEE_ROUTER } from "@/constans/layoutResource";
+
 export default {
     components: { MsDropdown },
     props: {
@@ -46,24 +53,12 @@ export default {
 
     data() {
         return {
-            listPagging: [
-                {
-                    title: 10,
-                },
-                {
-                    title: 20,
-                },
-                {
-                    title: 50,
-                },
-                {
-                    title: 100,
-                },
-            ],
+            listPagging: LIST_PAGGING,
             pageNumber: 1,
-            numberItem: 10,
+            numberItem: 20,
             fisrtData: 0,
             lastData: 0,
+            employeeRouter: EMPLOYEE_ROUTER,
         };
     },
     computed: {

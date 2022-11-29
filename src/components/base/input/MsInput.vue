@@ -46,12 +46,14 @@ export default {
             type: Boolean,
             default: false,
         },
+        //focus ô input
         tabForcus: {
             type: Boolean,
         },
     },
 
     watch: {
+        // focus ô input
         tabForcus(value) {
             if (value == true) {
                 this.$refs.input.focus();
@@ -116,7 +118,7 @@ export default {
 }
 
 .m-input::placeholder {
-    color: #bbb;
+    color: #999999;
     font-size: 14px;
 }
 

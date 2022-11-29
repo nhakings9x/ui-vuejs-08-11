@@ -39,7 +39,6 @@ export default {
         // Lable của form
         labelForm: {
             type: String,
-            default: "Lable",
         },
         // Có bắt buộc hay không
         required: {
@@ -53,7 +52,6 @@ export default {
         // Hiển thị text lỗi
         errorText: {
             type: String,
-            default: "Ô này không được để trống",
         },
         // Tên form control
         formControlName: {
@@ -76,14 +74,9 @@ export default {
         titleLable: {
             type: String,
         },
+        // focus ô input
         tabForcus: {
             type: Boolean,
-        },
-    },
-    watch: {
-        valueInput: {
-            deep: true,
-            handler(newVal, oldVal) {},
         },
     },
 
@@ -105,6 +98,7 @@ export default {
                 console.log(err);
             }
         },
+
         /**
          * Validate 2 form bắt buộc nhập là Mã và Tên NV
          * @param {*} data
@@ -117,6 +111,7 @@ export default {
                 console.log(err);
             }
         },
+
         /**
          * Kiểm tra có phải là số không
          * Author: NHAnh(02/11/2022)

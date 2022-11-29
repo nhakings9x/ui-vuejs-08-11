@@ -4,18 +4,19 @@
             <div>
                 <div class="table-header-left" v-show="listClicked.length > 0">
                     <label for="" class="mr-16"
-                        >Đã chọn: <b>{{ listClicked.length }}</b></label
+                        >{{ employeeResource.SELECTED }}:
+                        <b>{{ listClicked.length }}</b></label
                     >
                     <label
                         for=""
                         class="lable-unchecked mr-16"
                         @click="clearListDelete"
-                        >Bỏ chọn</label
+                        >{{ employeeResource.SELECTED }}</label
                     >
                     <ms-button
-                        btnText="Xóa"
                         class="btn-delete"
                         @click="deleteBatch()"
+                        :btnText="buttonSrc.IS_DELETE"
                     ></ms-button>
                 </div>
             </div>
@@ -23,23 +24,23 @@
                 <div class="mr-16" style="width: 300px">
                     <ms-input
                         class="m-w-300 m-input-icon icon-search"
-                        placeholder="Tìm kiếm theo tên, mã nhân viên"
                         @dataInput="searchValue"
+                        :placeholder="employeeResource.PLACEHOLDER_SEARCH"
                         name="searchInput"
                     ></ms-input>
                 </div>
                 <div class="icon-reload tooltip-relative" @click="reloadList()">
                     <div class="tooltip tooltip-reload">
                         <label for=""
-                            >Lấy lại dữ liệu
+                            >{{ tooltipResource.DATA_BACK }}
                             <div></div
                         ></label>
                     </div>
                 </div>
-                <div class="icon-excel tooltip-relative" @click="reloadList()">
+                <div class="icon-excel tooltip-relative" @click="exportExcel()">
                     <div class="tooltip tooltip-excel">
                         <label for=""
-                            >Xuất khẩu Excel
+                            >{{ tooltipResource.EXPORT }}
                             <div></div
                         ></label>
                     </div>
@@ -50,39 +51,59 @@
             <table id="tblEmployee" class="m-table">
                 <thead>
                     <th class="text-align-center thead__stiky">
-                        <input
-                            type="checkbox"
-                            v-model="checkAll"
-                            @click="selectAllTable()"
-                        />
+                        <div
+                            style="
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                            "
+                        >
+                            <input
+                                type="checkbox"
+                                v-model="checkAll"
+                                @click="selectAllTable()"
+                            />
+                        </div>
                     </th>
-                    <th class="text-align-left">MÃ NHÂN VIÊN</th>
-                    <th class="text-align-left">TÊN NHÂN VIÊN</th>
-                    <th class="text-align-left">GIỚI TÍNH</th>
-                    <th class="text-align-center">NGÀY SINH</th>
+                    <th class="text-align-left">
+                        {{ employeeResource.TABLE.EMPLOYEE_CODE }}
+                    </th>
+                    <th class="text-align-left">
+                        {{ employeeResource.TABLE.EMPLOYEE_NAME }}
+                    </th>
+                    <th class="text-align-left">
+                        {{ employeeResource.TABLE.GENDER }}
+                    </th>
+                    <th class="text-align-center">
+                        {{ employeeResource.TABLE.DATE_OF_BIRTH }}
+                    </th>
                     <th
+                        :title="employeeResource.TABLE.IDENTITYNUMBER_TITLE"
                         class="text-align-left thead__so-cmnd"
-                        title="Số chứng minh nhân dân"
                     >
-                        SỐ CMND
-                        <!-- <div class="tooltip tooltip__so-cmnd">
-                            <label for=""
-                                >Số chứng minh nhân dân
-                                <div></div
-                            ></label>
-                        </div> -->
+                        {{ employeeResource.TABLE.IDENTITYNUMBER }}
                     </th>
-                    <th class="text-align-left">CHỨC DANH</th>
-                    <th class="text-align-left">TÊN ĐƠN VỊ</th>
-                    <th class="text-align-left">SỐ TÀI KHOẢN</th>
-                    <th class="text-align-left">TÊN NGÂN HÀNG</th>
+                    <th class="text-align-left">
+                        {{ employeeResource.TABLE.JOB_POSITION_NAME }}
+                    </th>
+                    <th class="text-align-left">
+                        {{ employeeResource.TABLE.DEPARTMENT_NAME }}
+                    </th>
+                    <th class="text-align-left">
+                        {{ employeeResource.TABLE.BANK_NUMBER }}
+                    </th>
+                    <th class="text-align-left">
+                        {{ employeeResource.TABLE.BANK_NAME }}
+                    </th>
                     <th
+                        :title="employeeResource.TABLE.BANK_BRANCH_TITLE"
                         class="text-align-left"
-                        title="Chi nhánh tài khoản ngân hàng"
                     >
-                        CHI NHÁNH TK NGÂN HÀNG
+                        {{ employeeResource.TABLE.BANK_BRANCH }}
                     </th>
-                    <th class="text-align-center">CHỨC NĂNG</th>
+                    <th class="text-align-center">
+                        {{ employeeResource.TABLE.FUNCTION }}
+                    </th>
                 </thead>
                 <tbody>
                     <tr
@@ -92,12 +113,20 @@
                         @dblclick="employeeEdit($event, emp)"
                     >
                         <td class="text-align-center">
-                            <input
-                                type="checkbox"
-                                class="is-checked"
-                                v-model="emp.isChecked"
-                                @click="addListDelete(emp)"
-                            />
+                            <div
+                                style="
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                "
+                            >
+                                <input
+                                    type="checkbox"
+                                    class="is-checked"
+                                    v-model="emp.isChecked"
+                                    @click="addListDelete(emp)"
+                                />
+                            </div>
                         </td>
                         <td class="text-align-left">
                             {{ emp.EmployeeCode }}
@@ -140,7 +169,7 @@
                                     for=""
                                     @click="employeeEdit($event, emp)"
                                 >
-                                    Sửa
+                                    {{ employeeResource.TABLE.EDIT }}
                                 </button>
                                 <div
                                     class="icon-update"
@@ -176,14 +205,20 @@
                                                     )
                                                 "
                                             >
-                                                Xóa
+                                                {{
+                                                    employeeResource.TABLE
+                                                        .DELETE
+                                                }}
                                             </li>
                                             <li
                                                 @click="
                                                     employeeEdit($event, emp, 1)
                                                 "
                                             >
-                                                Nhân bản
+                                                {{
+                                                    employeeResource.TABLE
+                                                        .REPLICATION
+                                                }}
                                             </li>
                                         </ul>
                                     </div>
@@ -194,7 +229,7 @@
                 </tbody>
             </table>
 
-            <ms-popup
+            <employee-detail
                 v-if="popupStatus"
                 :titlePopup="titlePopup"
                 :employeeEditItem="employeeEditItem"
@@ -206,7 +241,7 @@
                 @reloadData="reloadData"
                 @openToastAdd="openToastAdd"
                 :edit="isEdit"
-            ></ms-popup>
+            ></employee-detail>
             <dialog-delete
                 v-if="isDelete"
                 :employeeID="idEmployee"
@@ -225,8 +260,8 @@
             ></ms-toast>
             <ms-toast
                 v-show="toastStatus"
-                toastAct="xóa"
                 @closeOpenToast="closeOpenToast"
+                :toastAct="toastMsg"
             ></ms-toast>
         </div>
         <div v-if="hadData" class="hadData">
@@ -235,18 +270,31 @@
     </div>
 </template>
 <script>
-import MsButton from "../base/button/MsButton.vue";
-import DialogDelete from "../base/dialog/dialogDelete.vue";
-import MsInput from "../base/input/MsInput.vue";
-import MsPopup from "../base/popup/MsPopup.vue";
-import MsToast from "../base/toast/MsToast.vue";
-import { directive } from "vue3-click-away";
-import { BASE_URL } from "../../constans/constans";
 import axios from "axios";
-import { GENDER } from "../../constans/enums";
+import MsButton from "../../base/button/MsButton.vue";
+import DialogDelete from "../../base/dialog/DialogDelete.vue";
+import MsInput from "../../base/input/MsInput.vue";
+import MsToast from "../../base/toast/MsToast.vue";
+import EmployeeDetail from "./EmployeeDetail.vue";
+import { directive } from "vue3-click-away";
+import { BASE_URL } from "@/constans/constans";
+import { GENDER } from "@/constans/enums";
+import { TITLE_POPUP } from "@/constans/resource";
+import {
+    EMPLOYEE_ROUTER,
+    TOOLTIP,
+    MS_BUTTON,
+    EMPLOYEE_DETAIL,
+} from "@/constans/layoutResource";
 
 export default {
-    components: { MsInput, MsButton, DialogDelete, MsPopup, MsToast },
+    components: {
+        MsInput,
+        MsButton,
+        DialogDelete,
+        MsToast,
+        EmployeeDetail,
+    },
     props: ["listEmployee", "reloadList", "hadData", "errorTextApi"],
     data() {
         return {
@@ -267,8 +315,12 @@ export default {
             putEmployeePopup: true,
             toastStatusEdit: false,
             isEdit: true,
-            titlePopup: "Sửa nhân viên",
             isDeleteBatch: false,
+            toastMsg: "",
+            titlePopup: TITLE_POPUP,
+            employeeResource: EMPLOYEE_ROUTER,
+            tooltipResource: TOOLTIP,
+            buttonSrc: MS_BUTTON,
         };
     },
     // Click outside
@@ -290,8 +342,12 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         searchValue(data) {
-            this.searchValueInput = data.value;
-            this.$emit("searchValue", this.searchValueInput);
+            try {
+                this.searchValueInput = data.value;
+                this.$emit("searchValue", this.searchValueInput);
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -299,20 +355,28 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         openToast(data) {
-            debugger;
-            this.checkAll = false;
-            this.listClicked = [];
-            this.toastStatus = data;
-            setTimeout(() => {
-                this.toastStatus = false;
-            }, 4000);
+            try {
+                this.toastMsg = "xóa";
+                this.checkAll = false;
+                this.listClicked = [];
+                this.toastStatus = data;
+                setTimeout(() => {
+                    this.toastStatus = false;
+                }, 4000);
+            } catch (err) {
+                console.log(err);
+            }
         },
         /**
          * Đóng mở thanh chức năng
          * author: NHAnh(26/10/2022)
          */
         closeOpen(index) {
-            index = !index;
+            try {
+                index = !index;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -320,14 +384,18 @@ export default {
          * author: NHAnh(26/10/2022)
          */
         dateTime(dateAPI) {
-            if (dateAPI) {
-                let date = new Date(dateAPI);
-                let day = date.getDate();
-                day = day < 10 ? `0${day}` : day;
-                let month = date.getMonth() + 1;
-                month = month < 10 ? `0${month}` : month;
-                let year = date.getFullYear();
-                return `${day}/${month}/${year}`;
+            try {
+                if (dateAPI) {
+                    let date = new Date(dateAPI);
+                    let day = date.getDate();
+                    day = day < 10 ? `0${day}` : day;
+                    let month = date.getMonth() + 1;
+                    month = month < 10 ? `0${month}` : month;
+                    let year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                }
+            } catch (err) {
+                console.log(err);
             }
         },
         /**
@@ -354,18 +422,21 @@ export default {
          * Author: NHAnh(24/11/2022)
          */
         addListDelete(emp) {
-            emp.isChecked = !emp.isChecked;
-            if (emp.isChecked == true) {
-                this.listClicked.push(emp.EmployeeId);
-            } else if (emp.isChecked == false) {
-                this.listClicked = this.listClicked.filter(
-                    e => e != emp.EmployeeId
-                );
+            try {
+                emp.isChecked = !emp.isChecked;
+                if (emp.isChecked == true) {
+                    this.listClicked.push(emp.EmployeeId);
+                } else if (emp.isChecked == false) {
+                    this.listClicked = this.listClicked.filter(
+                        e => e != emp.EmployeeId
+                    );
+                }
+                if (this.listClicked.length < this.listEmployee.length) {
+                    this.checkAll = false;
+                }
+            } catch (err) {
+                console.log(err);
             }
-            if (this.listClicked.length < this.listEmployee.length) {
-                this.checkAll = false;
-            }
-            console.log(this.listClicked);
         },
 
         /**
@@ -373,8 +444,12 @@ export default {
          * Author: NHAnh(24/11/2022)
          */
         deleteBatch() {
-            this.isDeleteBatch = true;
-            this.isDelete = !this.isDelete;
+            try {
+                this.isDeleteBatch = true;
+                this.isDelete = !this.isDelete;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -386,13 +461,13 @@ export default {
                 let gen = "";
                 switch (gender) {
                     case GENDER.MALE:
-                        gen = "Nam";
+                        gen = EMPLOYEE_DETAIL.MALE;
                         break;
                     case GENDER.FEMALE:
-                        gen = "Nữ";
+                        gen = EMPLOYEE_DETAIL.FEMALE;
                         break;
                     case GENDER.OTHER:
-                        gen = "Khác";
+                        gen = EMPLOYEE_DETAIL.OTHER;
                         break;
                 }
                 return gen;
@@ -406,10 +481,14 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         oClDialogDelete(id, name) {
-            this.isDeleteBatch = false;
-            this.isDelete = !this.isDelete;
-            this.idEmployee = id;
-            this.nameEmployee = name;
+            try {
+                this.isDeleteBatch = false;
+                this.isDelete = !this.isDelete;
+                this.idEmployee = id;
+                this.nameEmployee = name;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -417,16 +496,20 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         formatDate(date) {
-            if (date) {
-                var d = new Date(date),
-                    month = "" + (d.getMonth() + 1),
-                    day = "" + d.getDate(),
-                    year = d.getFullYear();
+            try {
+                if (date) {
+                    var d = new Date(date),
+                        month = "" + (d.getMonth() + 1),
+                        day = "" + d.getDate(),
+                        year = d.getFullYear();
 
-                if (month.length < 2) month = "0" + month;
-                if (day.length < 2) day = "0" + day;
+                    if (month.length < 2) month = "0" + month;
+                    if (day.length < 2) day = "0" + day;
 
-                return [year, month, day].join("-");
+                    return [year, month, day].join("-");
+                }
+            } catch (err) {
+                console.log(err);
             }
         },
 
@@ -434,22 +517,26 @@ export default {
          * Format ô input date trong popup sửa và nhân bản nhân viên, nếu value == 1 sẽ là form nhân bản
          * NHAnh(06/11/2022)
          */
-        employeeEdit(event, employee, value) {
-            this.titlePopup = "Sửa nhân viên";
-            this.isEdit = true;
-            if (value == 1) {
-                this.isEdit = false;
-                this.titlePopup = "Thêm mới nhân viên";
-            }
+        employeeEdit(event, emp, value) {
+            try {
+                this.titlePopup = TITLE_POPUP.EDIT;
+                this.isEdit = true;
+                if (value == 1) {
+                    this.isEdit = false;
+                    this.titlePopup = TITLE_POPUP.INSERT;
+                }
 
-            this.popupStatus = !this.popupStatus;
-            this.employeeEditItem = employee;
-            this.employeeEditItem.DateofBirth = this.formatDate(
-                this.employeeEditItem.DateofBirth
-            );
-            this.employeeEditItem.IdentityDate = this.formatDate(
-                this.employeeEditItem.IdentityDate
-            );
+                this.popupStatus = !this.popupStatus;
+                this.employeeEditItem = emp;
+                this.employeeEditItem.DateofBirth = this.formatDate(
+                    this.employeeEditItem.DateofBirth
+                );
+                this.employeeEditItem.IdentityDate = this.formatDate(
+                    this.employeeEditItem.IdentityDate
+                );
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -457,10 +544,18 @@ export default {
          * author: NHAnh (02/11/2022)
          */
         closeOpenToast() {
-            this.toastStatus = !this.toastStatus;
+            try {
+                this.toastStatus = !this.toastStatus;
+            } catch (err) {
+                console.log(err);
+            }
         },
         closeOpenToastEdit() {
-            this.toastStatusEdit = !this.toastStatusEdit;
+            try {
+                this.toastStatusEdit = !this.toastStatusEdit;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -468,7 +563,11 @@ export default {
          * author: NHAnh (02/11/2022)
          */
         onClose() {
-            this.popupStatus = false;
+            try {
+                this.popupStatus = false;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -476,10 +575,14 @@ export default {
          * author: NHAnh(02/11/2022)
          */
         openToastEdit(data) {
-            this.toastStatusEdit = data;
-            setTimeout(() => {
-                this.toastStatusEdit = false;
-            }, 4000);
+            try {
+                this.toastStatusEdit = data;
+                setTimeout(() => {
+                    this.toastStatusEdit = false;
+                }, 4000);
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -487,7 +590,11 @@ export default {
          * author: NHAnh(03/11/2022)
          */
         reloadData() {
-            this.$emit("reloadData");
+            try {
+                this.$emit("reloadData");
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -495,7 +602,11 @@ export default {
          * author: NHAnh(03/11/2022)
          */
         onClickAway(event, emp) {
-            emp.closeOpenDelete = false;
+            try {
+                emp.closeOpenDelete = false;
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
@@ -503,17 +614,59 @@ export default {
          * Author: NHAnh(06/11/2022)
          */
         openToastAdd(data) {
-            debugger;
-            this.$emit("openToastAdd", data);
+            try {
+                this.$emit("openToastAdd", data);
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**
          * Clear danh sách IP xóa
          */
         clearListDelete() {
-            this.checkAll = false;
-            this.listEmployee.map(e => (e.isChecked = false));
-            this.listClicked = [];
+            try {
+                this.checkAll = false;
+                this.listEmployee.map(e => (e.isChecked = false));
+                this.listClicked = [];
+            } catch (err) {
+                console.log(err);
+            }
+        },
+
+        /**
+         * xuất khẩu excel
+         * Author: NHAnh(20/11/2022)
+         */
+        exportExcel() {
+            try {
+                axios
+                    .post(`${BASE_URL}/exportExcel`)
+                    .then(res => {
+                        this.toastMsg = "Xuất khẩu";
+                        this.toastStatus = true;
+                        setTimeout(() => {
+                            this.toastStatus = false;
+                        }, 4000);
+                        res.config.responseType = "blob";
+                        axios(res.config).then(res => {
+                            const url = window.URL.createObjectURL(
+                                new Blob([res.data])
+                            );
+                            const link = document.createElement("a");
+                            link.href = url;
+                            link.setAttribute(
+                                "download",
+                                "Danh sách nhân viên.xlsx"
+                            );
+                            document.body.appendChild(link);
+                            link.click();
+                        });
+                    })
+                    .catch(e => console.log(e));
+            } catch (err) {
+                console.log(err);
+            }
         },
     },
 };
@@ -575,7 +728,7 @@ export default {
     justify-content: center;
 }
 .update-table button {
-    margin-right: 16px;
+    margin-right: 8px;
     border: none;
     background-color: unset;
     color: #0075c0;

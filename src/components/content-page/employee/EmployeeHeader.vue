@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="m-main__header">
-            <label for="">Nhân viên</label>
+            <label for="">{{ employeeResource.TITLE }}</label>
             <div class="m-main__header-right">
                 <ms-button
                     btnText="Thêm mới nhân viên"
@@ -9,24 +9,26 @@
                 ></ms-button>
             </div>
         </div>
-        <ms-popup
+        <employee-detail
             v-if="popupStatus"
-            titlePopup="Thêm mới nhân viên"
+            :titlePopup="titlePopup.INSERT"
             :closeOpenPopup="closeOpenPopup"
             :reloadList="reloadList"
             :addEmployeePopup="popupAdd"
             @openToastAdd="openToastAdd"
             @onClose="onClose"
-        ></ms-popup>
+        ></employee-detail>
     </div>
 </template>
 <script>
-import MsButton from "../base/button/MsButton.vue";
-import MsPopup from "../base/popup/MsPopup.vue";
-import MsToast from "../base/toast/MsToast.vue";
+import MsButton from "@/components/base/button/MsButton.vue";
+import MsToast from "@/components/base/toast/MsToast.vue";
+import { TITLE_POPUP } from "@/constans/resource";
+import { EMPLOYEE_ROUTER } from "@/constans/layoutResource";
+import EmployeeDetail from "./EmployeeDetail.vue";
 
 export default {
-    components: { MsButton, MsPopup, MsToast },
+    components: { MsButton, MsToast, EmployeeDetail },
     props: ["reloadList"],
     data() {
         return {
@@ -34,16 +36,45 @@ export default {
             toastStatus: false,
             // mở nut X popup thêm
             popupAdd: true,
+            titlePopup: TITLE_POPUP,
+            employeeResource: EMPLOYEE_ROUTER,
         };
     },
+    created() {
+        // tạo sự kiện phím tắt
+        window.addEventListener("keyup", this.listenerKeyup);
+    },
+    beforeUnmount() {
+        // Hủy sự kiện phím tắt
+        window.removeEventListener("keyup", this.listenerKeyup);
+    },
     methods: {
+        /**
+         * Phím tắt
+         * author: NHAnh (27/11/2022)
+         */
+        listenerKeyup(e) {
+            try {
+                // Insert
+                if (e.keyCode == 45) {
+                    this.closeOpenPopup();
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        },
+
         /**
          * Thực hiện đóng mở popup
          * Author: NHAnh (06/11/2022)
          */
         closeOpenPopup() {
-            this.popupStatus = !this.popupStatus;
-            this.eventBus.emit("togglePopup", this.popupStatus);
+            try {
+                this.popupStatus = !this.popupStatus;
+                this.eventBus.emit("togglePopup", this.popupStatus);
+            } catch (err) {
+                console.log(err);
+            }
         },
 
         /**

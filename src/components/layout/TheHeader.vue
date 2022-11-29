@@ -3,27 +3,25 @@
         <div class="m-header__left">
             <div
                 id="thu-gon-sidebar"
-                class="icon-3-gach sidebar-hiden"
+                class="icon-sidebar sidebar-hiden"
                 @click="closeSidebar()"
                 v-show="!colHeader"
             >
-                <div class="tooltip tooltip__3-gach">
+                <div class="tooltip tooltip__sidebar">
                     <label for=""
-                        >Thu gọn Sidebar
+                        >{{ tooltipSrc.EXPAND_SIDEBAR }}
                         <div></div
                     ></label>
                 </div>
             </div>
-            <b class="header-text"
-                >CÔNG TY TNHH SẢN XUẤT - THƯƠNG MẠI - DỊCH VỤ QUI PHÚC</b
-            >
+            <b class="header-text">{{ resourceHeader.TITLE }}</b>
             <div class="icon-down"></div>
         </div>
         <div class="m-header__right">
             <div class="icon-bell">
                 <div class="tooltip tooltip__bell">
                     <label for=""
-                        >Thông báo
+                        >{{ tooltipSrc.NOTIFICATION }}
                         <div></div
                     ></label>
                 </div>
@@ -35,11 +33,15 @@
     </div>
 </template>
 <script>
+import { HEADER, TOOLTIP } from "@/constans/layoutResource";
+
 export default {
     data() {
         return {
             // Trạng thái icon 3 gạch
             colHeader: false,
+            resourceHeader: HEADER,
+            tooltipSrc: TOOLTIP,
         };
     },
     props: ["openCloseSidebar"],
