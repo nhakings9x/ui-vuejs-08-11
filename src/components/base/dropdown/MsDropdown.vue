@@ -101,6 +101,9 @@ export default {
             type: Number,
         },
         value: {},
+        tabForcus: {
+            type: Boolean,
+        },
     },
     created() {
         // tạo sự kiện phím tắt;
@@ -145,6 +148,13 @@ export default {
                 }
             } catch (err) {
                 console.log(err);
+            }
+        },
+
+        // focus ô input
+        tabForcus(value) {
+            if (value == true) {
+                this.$refs.dropdown.focus();
             }
         },
     },
@@ -232,6 +242,7 @@ export default {
 
         /**
          * Sự kiện blur dropdown
+         * author: NHAnh (02/11/2022)
          */
         blur(event) {
             try {
@@ -240,6 +251,14 @@ export default {
             } catch (err) {
                 console.log(err);
             }
+        },
+
+        /**
+         * focus ô dropdown
+         * author: NHAnh 14/12/2022
+         */
+        focusInput() {
+            this.$refs.dropdown.focus();
         },
     },
 };

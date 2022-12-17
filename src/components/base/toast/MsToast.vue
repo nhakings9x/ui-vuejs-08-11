@@ -4,10 +4,8 @@
             <div class="left-toast" v-if="!isError">
                 <div class="icon-succses ml-16 mr-8"></div>
                 <!-- <div class="toast-content"> -->
-                <b for="" class="title-toast">Thành công!</b>
-                <label for="">
-                    &nbsp;Bạn đã {{ toastAct }} thành công nhân viên!</label
-                >
+                <b for="" class="title-toast">{{ toastSrc.TITLE }}</b>
+                <label for=""> &nbsp;{{ toastSrc.CONTENT(toastAct) }}</label>
                 <!-- </div> -->
             </div>
             <div class="icon-close-clone mr-16" @click="closeOpenToast()"></div>
@@ -15,8 +13,15 @@
     </div>
 </template>
 <script>
+import { TOAST } from "@/constans/layoutResource";
+
 export default {
     props: ["toastAct", "isError"],
+    data() {
+        return {
+            toastSrc: TOAST,
+        };
+    },
     methods: {
         /**
          * Thực hiện đóng Toast

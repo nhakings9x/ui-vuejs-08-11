@@ -9,7 +9,7 @@
             >
                 <div class="tooltip tooltip__sidebar">
                     <label for=""
-                        >{{ tooltipSrc.EXPAND_SIDEBAR }}
+                        >{{ tooltipSrc.COLLECT_SIDEBAR }}
                         <div></div
                     ></label>
                 </div>
@@ -26,7 +26,7 @@
                     ></label>
                 </div>
             </div>
-            <div class="icon-user"></div>
+            <div class="icon-user mr-8"></div>
             <b class="user-name">Nguyễn Văn Mạnh</b>
             <div class="icon-down-small"></div>
         </div>

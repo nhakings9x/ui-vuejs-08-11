@@ -11,12 +11,12 @@
                         for=""
                         class="lable-unchecked mr-16"
                         @click="clearListDelete"
-                        >{{ employeeResource.SELECTED }}</label
+                        >{{ employeeResource.UNCHECKED }}</label
                     >
                     <ms-button
                         class="btn-delete"
-                        @click="deleteBatch()"
                         :btnText="buttonSrc.IS_DELETE"
+                        @click="deleteBatch()"
                     ></ms-button>
                 </div>
             </div>
@@ -24,12 +24,16 @@
                 <div class="mr-16" style="width: 300px">
                     <ms-input
                         class="m-w-300 m-input-icon icon-search"
-                        @dataInput="searchValue"
                         :placeholder="employeeResource.PLACEHOLDER_SEARCH"
+                        @dataInput="searchValue"
                         name="searchInput"
+                        :maxlength="maxlenght.SEARCH"
                     ></ms-input>
                 </div>
-                <div class="icon-reload tooltip-relative" @click="reloadList()">
+                <div
+                    class="icon-reload tooltip-relative"
+                    @click="reloadListPresent()"
+                >
                     <div class="tooltip tooltip-reload">
                         <label for=""
                             >{{ tooltipResource.DATA_BACK }}
@@ -271,21 +275,21 @@
 </template>
 <script>
 import axios from "axios";
-import MsButton from "../../base/button/MsButton.vue";
-import DialogDelete from "../../base/dialog/DialogDelete.vue";
-import MsInput from "../../base/input/MsInput.vue";
-import MsToast from "../../base/toast/MsToast.vue";
+import MsButton from "../../../base/button/MsButton.vue";
+import DialogDelete from "../../../base/dialog/DialogDelete.vue";
+import MsInput from "../../../base/input/MsInput.vue";
+import MsToast from "../../../base/toast/MsToast.vue";
 import EmployeeDetail from "./EmployeeDetail.vue";
 import { directive } from "vue3-click-away";
-import { BASE_URL } from "@/constans/constans";
-import { GENDER } from "@/constans/enums";
-import { TITLE_POPUP } from "@/constans/resource";
+import { BASE_URL } from "../../../../constans/constans";
+import { GENDER } from "../../../../constans/enums";
+import { TITLE_POPUP, MAXLENGHT_INPUT } from "../../../../constans/resource";
 import {
     EMPLOYEE_ROUTER,
     TOOLTIP,
     MS_BUTTON,
     EMPLOYEE_DETAIL,
-} from "@/constans/layoutResource";
+} from "../../../../constans/layoutResource";
 
 export default {
     components: {
@@ -295,7 +299,13 @@ export default {
         MsToast,
         EmployeeDetail,
     },
-    props: ["listEmployee", "reloadList", "hadData", "errorTextApi"],
+    props: [
+        "listEmployee",
+        "reloadList",
+        "hadData",
+        "errorTextApi",
+        "reloadListPresent",
+    ],
     data() {
         return {
             checkAll: false,
@@ -321,6 +331,7 @@ export default {
             employeeResource: EMPLOYEE_ROUTER,
             tooltipResource: TOOLTIP,
             buttonSrc: MS_BUTTON,
+            maxlenght: MAXLENGHT_INPUT,
         };
     },
     // Click outside

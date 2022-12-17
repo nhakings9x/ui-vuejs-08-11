@@ -5,6 +5,7 @@
             <div class="m-main__header-right">
                 <ms-button
                     btnText="Thêm mới nhân viên"
+                    titleBtn="Thêm mới nhân viên (Insert)"
                     @click="closeOpenPopup()"
                 ></ms-button>
             </div>
@@ -21,10 +22,10 @@
     </div>
 </template>
 <script>
-import MsButton from "@/components/base/button/MsButton.vue";
-import MsToast from "@/components/base/toast/MsToast.vue";
-import { TITLE_POPUP } from "@/constans/resource";
-import { EMPLOYEE_ROUTER } from "@/constans/layoutResource";
+import MsButton from "../../../base/button/MsButton.vue";
+import MsToast from "../../../base/toast/MsToast.vue";
+import { TITLE_POPUP } from "../../../../constans/resource";
+import { EMPLOYEE_ROUTER } from "../../../../constans/layoutResource";
 import EmployeeDetail from "./EmployeeDetail.vue";
 
 export default {

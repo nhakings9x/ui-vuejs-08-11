@@ -4,8 +4,7 @@
             <div class="box-content">
                 <div class="content">
                     <div class="title-noti">
-                        Xóa{{ isDeleteBatch ? ` ${listClicked.length}` : "" }}
-                        người dùng
+                        {{ dialogSrc.TITLE_DELETE(listClickedLenght) }}
                     </div>
                     <div class="icon-close" @click="oClDialogDelete"></div>
                 </div>
@@ -47,6 +46,7 @@ export default {
         return {
             buttonSrc: MS_BUTTON,
             dialogSrc: DIALOG_TEXT,
+            listClickedLenght: "",
         };
     },
     props: [
@@ -60,11 +60,16 @@ export default {
     created() {
         // tạo sự kiện phím tắt
         window.addEventListener("keyup", this.listenerKeyup);
+
+        if (this.listClicked.length == 0) {
+            return (this.listClickedLenght = ``);
+        } else return (this.listClickedLenght = ` ${this.listClicked.length}`);
     },
     beforeUnmount() {
         // Hủy sự kiện phím tắt
         window.removeEventListener("keyup", this.listenerKeyup);
     },
+    watch: {},
     methods: {
         /**
          * Phím tắt

@@ -13,6 +13,7 @@
         :value="valueInput || ''"
         @blur="onBlur"
         :autofocus="autofocus"
+        :maxlength="maxlength"
     />
 </template>
 <script>
@@ -49,6 +50,9 @@ export default {
         //focus ô input
         tabForcus: {
             type: Boolean,
+        },
+        maxlength: {
+            type: Number,
         },
     },
 

@@ -13,7 +13,7 @@
                 <div class="pagging-list">
                     <ms-dropdown
                         :listDropdownItem="listPagging"
-                        :defaultValue="10"
+                        :defaultValue="20"
                         @pagging_value="paggingNumber"
                     ></ms-dropdown>
                 </div>
@@ -30,9 +30,9 @@
     </div>
 </template>
 <script>
-import MsDropdown from "../../base/dropdown/MsDropdown.vue";
-import { LIST_PAGGING } from "@/constans/resource";
-import { EMPLOYEE_ROUTER } from "@/constans/layoutResource";
+import MsDropdown from "../../../base/dropdown/MsDropdown.vue";
+import { LIST_PAGGING } from "../../../../constans/resource";
+import { EMPLOYEE_ROUTER } from "../../../../constans/layoutResource";
 
 export default {
     components: { MsDropdown },

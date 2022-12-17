@@ -2,7 +2,7 @@
 export const SIDEBAR = {
     HEADER: "KẾ TOÁN",
     OVERVIEW: "Tổng quan",
-    CASH: "Tiền mặt",
+    CASH: "Nhân viên",
     DEPOSITS: "Tiền gửi",
     PURCHASE: "Mua hàng",
     SELL: "Bán hàng",
@@ -67,15 +67,18 @@ export const EMPLOYEE_DETAIL = {
     FEMALE: "Nữ",
     OTHER: "Khác",
     IDENTITY_NUMBER: "SỐ CMND",
-    IDENTITY_NUMBER_TITLE: "SỐ chứng minh nhân dân",
+    IDENTITY_NUMBER_TITLE: "Số chứng minh nhân dân",
     IDENTITY_DATE: "Ngày cấp",
     IDENTITY_PLACE: "Nơi cấp",
     ADRESS: "Địa chỉ",
     PHONE_NUMBER: "ĐT di động",
     PHONE_NUMBER_TITLE: "Điện thoại di động",
+    PHONE_NUMBER_PH: "VD: 0912345678",
     TELEPHONE_NUMBER: "ĐT cố định",
+
     TELEPHONE_NUMBER_TITLE: "Điện thoại cố định",
     EMAIL: "Email",
+    EMAIL_PH: "VD: abc@gmail.com",
     BANK_NUMBER: "Tài khoản ngân hàng",
     BANK_NAME: "Tên ngân hàng",
     BANK_BRANCH: "Chi nhánh",
@@ -94,19 +97,34 @@ export const TOOLTIP = {
 export const MS_BUTTON = {
     ADD: "Thêm mới nhân viên",
     CANCEL: "Hủy",
+    CANCEL_TITLE: "Hủy (ESC)",
     SAVE: "Cất",
+    SAVE_TITLE: "Cất (Ctrl + F9)",
     SAVE_AND_ADD: "Cất và thêm",
+    SAVE_AND_ADD_TITLE: "Cất và thêm (Ctrl + F8)",
     YES: "Đồng ý",
     NO: "Không",
-    DELETE: "Có, xóa người dùng",
+    DELETE: "Có, xóa nhân viên",
     IS_DELETE: "Xóa",
     CLOSE: "Đóng",
     DONT_SAVE: "Không lưu",
     SAVE_DIALOG: "Lưu",
+    ADD_NEW_EMPLOYEE: "Thêm mới nhân viên",
+    ADD_NEW_EMPLOYEE_TITLE: "Thêm mới nhân viên (Insert)",
 };
 
 export const DIALOG_TEXT = {
     IS_UPDATE: "Dữ liệu đã bị thay đổi. Bạn có muốn cất không?",
-    IS_DELETE: "Bạn có chắc muốn xóa người dùng đã chọn không?",
+    IS_DELETE: "Bạn có chắc muốn xóa nhân viên đã chọn không?",
     TITLE_UPDATE: "Dữ liệu đã thay đổi",
+    TITLE_DELETE: value => {
+        return `Xóa${value} nhân viên?`;
+    },
+};
+
+export const TOAST = {
+    TITLE: "Thành công!",
+    CONTENT: value => {
+        return `Bạn đã ${value} thành công nhân viên!`;
+    },
 };

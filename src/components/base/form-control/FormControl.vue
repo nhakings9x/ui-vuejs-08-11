@@ -14,6 +14,8 @@
             :autofocus="autofocus"
             :tabindex="tabindex"
             :tabForcus="tabForcus"
+            :placeholder="placeholder"
+            :maxlength="maxlengthIP"
         ></ms-input>
 
         <label
@@ -77,6 +79,12 @@ export default {
         // focus ô input
         tabForcus: {
             type: Boolean,
+        },
+        placeholder: {
+            type: String,
+        },
+        maxlengthIP: {
+            type: Number,
         },
     },
 

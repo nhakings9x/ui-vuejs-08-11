@@ -26,26 +26,30 @@
                             <span>{{ employeeDetail.IS_SUPPLIER }}</span>
                         </label>
                     </div>
-                </div>
-                <div class="m-popup__close">
-                    <div class="icon-help mr-8">
-                        <div class="tooltip tooltip__help">
-                            <label for=""
-                                >{{ tooltipResource.HELP }}
-                                <div></div
-                            ></label>
+                    <div class="m-popup__close">
+                        <div
+                            class="icon-help mr-8"
+                            :title="tooltipResource.HELP"
+                        >
+                            <!-- <div class="tooltip tooltip__help">
+                                <label for=""
+                                    >{{ tooltipResource.HELP }}
+                                    <div></div
+                                ></label>
+                            </div> -->
                         </div>
-                    </div>
-                    <div
-                        id="js-close"
-                        class="icon-close"
-                        @click="closePopup(1)"
-                    >
-                        <div class="tooltip tooltip__close">
-                            <label for=""
-                                >{{ tooltipResource.CLOSE }}
-                                <div></div
-                            ></label>
+                        <div
+                            id="js-close"
+                            class="icon-close"
+                            @click="closePopup(1)"
+                            :title="tooltipResource.CLOSE"
+                        >
+                            <!-- <div class="tooltip tooltip__close">
+                                <label for=""
+                                    >{{ tooltipResource.CLOSE }}
+                                    <div></div
+                                ></label>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -69,7 +73,8 @@
                                         :tabindex="1"
                                         ref="input"
                                         :autofocus="true"
-                                        :tabForcus="tabForcus"
+                                        :maxlengthIP="maxlenght.CODE"
+                                        :tabForcus="tabForcus.employeeCode"
                                         @blur="validateFormCode"
                                     ></form-control>
                                 </div>
@@ -85,7 +90,10 @@
                                         :formControlName="
                                             formName.EMPLOYEE_NAME
                                         "
+                                        :maxlengthIP="maxlenght.NAME"
+                                        ref="employeeName"
                                         :tabindex="2"
+                                        :tabForcus="tabForcus.employeeName"
                                         :valueInput="employee.EmployeeName"
                                         @blur="validateFormName"
                                     ></form-control>
@@ -106,8 +114,10 @@
                                         :dpName="employee.DepartmentID"
                                         :tabindex="3"
                                         :validate="validate.DepartmentId"
-                                        @dropdown-value="dpId"
                                         :edit="edit"
+                                        ref="department"
+                                        :tabForcus="tabForcus.DepartmentId"
+                                        @dropdown-value="dpId"
                                         @validateDD="validateDP"
                                         @blur="validateDP"
                                     ></ms-dropdown>
@@ -132,6 +142,7 @@
                                         :formControlName="
                                             formName.JOB_POSITION_NAME
                                         "
+                                        :maxlengthIP="maxlenght.JOB_NAME"
                                         :tabindex="4"
                                         :valueInput="employee.JobPositionName"
                                     ></form-control>
@@ -152,6 +163,7 @@
                                                 ? 'm-input__error'
                                                 : '',
                                         ]"
+                                        ref="dateOfBirth"
                                         tabindex="5"
                                         v-model="employee.DateofBirth"
                                         @blur="validateDate(1)"
@@ -232,6 +244,8 @@
                                         :formControlName="
                                             formName.IDENTITY_NUMBER
                                         "
+                                        :tabForcus="tabForcus.IdentityNumber"
+                                        :maxlengthIP="maxlenght.ID_NUMBER"
                                         :valueInput="employee.IdentityNumber"
                                         :tabindex="9"
                                         @blur="validateNumber(1)"
@@ -244,6 +258,7 @@
                                     <input
                                         type="date"
                                         class="m-input required"
+                                        ref="identityDate"
                                         v-model="employee.IdentityDate"
                                         @blur="validateDate(2)"
                                         tabindex="10"
@@ -265,6 +280,7 @@
                                         :formControlName="
                                             formName.IDENTITY_PLACE
                                         "
+                                        :maxlengthIP="maxlenght.ID_PLACE"
                                         :valueInput="employee.IdentityPlace"
                                         :tabindex="11"
                                     ></form-control>
@@ -283,6 +299,7 @@
                                     :errorText="errors.Adress"
                                     :valueInput="employee.Adress"
                                     :tabindex="12"
+                                    :maxlengthIP="maxlenght.ADDRESS"
                                 ></form-control>
                             </div>
                         </div>
@@ -296,8 +313,13 @@
                                     @dataInput="dataForm"
                                     :validateForm="validate.PhoneNumber"
                                     :errorText="errors.PhoneNumber"
+                                    :maxlengthIP="maxlenght.PHONE"
                                     :formControlName="formName.PHONE_NUMBER"
                                     :valueInput="employee.PhoneNumber"
+                                    :placeholder="
+                                        employeeDetail.PHONE_NUMBER_PH
+                                    "
+                                    :tabForcus="tabForcus.PhoneNumber"
                                     @blur="validateNumber(2)"
                                     :tabindex="13"
                                 ></form-control>
@@ -312,7 +334,12 @@
                                     :validateForm="validate.TelephoneNumber"
                                     :errorText="errors.TelephoneNumber"
                                     :formControlName="formName.TELEPHONE_NUMBER"
+                                    :placeholder="
+                                        employeeDetail.PHONE_NUMBER_PH
+                                    "
+                                    :maxlengthIP="maxlenght.PHONE"
                                     :valueInput="employee.TelephoneNumber"
+                                    :tabForcus="tabForcus.TelephoneNumber"
                                     @blur="validateNumber(3)"
                                     :tabindex="14"
                                 ></form-control>
@@ -325,6 +352,9 @@
                                     :errorText="errors.Email"
                                     :formControlName="formName.EMAIL"
                                     :valueInput="employee.Email"
+                                    :maxlengthIP="maxlenght.EMAIL"
+                                    :placeholder="employeeDetail.EMAIL_PH"
+                                    :tabForcus="tabForcus.email"
                                     @blur="ValidateEmail()"
                                     :tabindex="15"
                                 ></form-control>
@@ -339,6 +369,8 @@
                                     :errorText="errors.BankNumber"
                                     :formControlName="formName.BANK_NUMBER"
                                     :valueInput="employee.BankNumber"
+                                    :maxlengthIP="maxlenght.BANK_NUMBER"
+                                    :tabForcus="tabForcus.BankNumber"
                                     @blur="validateNumber(4)"
                                     :tabindex="16"
                                 ></form-control>
@@ -351,6 +383,7 @@
                                     :errorText="errors.BankName"
                                     :formControlName="formName.BANK_NAME"
                                     :valueInput="employee.BankName"
+                                    :maxlengthIP="maxlenght.BANK_NAME"
                                     :tabindex="17"
                                 ></form-control>
                             </div>
@@ -361,6 +394,7 @@
                                     :validateForm="validate.BankBranch"
                                     :errorText="errors.BankBranch"
                                     :formControlName="formName.BANK_BRANCH"
+                                    :maxlengthIP="maxlenght.BANK_BRANCH"
                                     :valueInput="employee.BankBranch"
                                     :tabindex="18"
                                 ></form-control>
@@ -368,28 +402,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="m-popup__footer">
+            </div>
+            <div class="m-popup__footer">
+                <ms-button
+                    :btnText="buttonSrc.CANCEL"
+                    :titleBtn="buttonSrc.CANCEL_TITLE"
+                    btnExtra
+                    @click="closePopup(1)"
+                    :tabindex="21"
+                ></ms-button>
+                <div class="m-popup__footer-left">
                     <ms-button
-                        :btnText="buttonSrc.CANCEL"
-                        btnExtra
-                        @click="closePopup(1)"
-                        :tabindex="21"
+                        :btnText="buttonSrc.SAVE"
+                        :titleBtn="buttonSrc.SAVE_TITLE"
+                        :btnExtra="!edit"
+                        @click="addEmployee()"
+                        :tabindex="20"
                     ></ms-button>
-                    <div class="m-popup__footer-left">
-                        <ms-button
-                            :btnText="buttonSrc.SAVE"
-                            :btnExtra="!edit"
-                            @click="addEmployee()"
-                            :tabindex="20"
-                        ></ms-button>
-                        <ms-button
-                            class="ml-8"
-                            v-if="!edit"
-                            :btnText="buttonSrc.SAVE_AND_ADD"
-                            @click="addEmployee(saveSrc.SAVE_AND_ADD)"
-                            :tabindex="19"
-                        ></ms-button>
-                    </div>
+                    <ms-button
+                        class="ml-8"
+                        v-if="!edit"
+                        :btnText="buttonSrc.SAVE_AND_ADD"
+                        :titleBtn="buttonSrc.SAVE_AND_ADD_TITLE"
+                        @click="addEmployee(saveSrc.SAVE_AND_ADD)"
+                        :tabindex="19"
+                    ></ms-button>
                 </div>
             </div>
         </div>
@@ -420,17 +457,25 @@
     </div>
 </template>
 <script>
-import MsButton from "../../base/button/MsButton.vue";
-import MsDropdown from "../../base/dropdown/MsDropdown.vue";
-import FormControl from "../../base/form-control/FormControl.vue";
+import MsButton from "../../../base/button/MsButton.vue";
+import MsDropdown from "../../../base/dropdown/MsDropdown.vue";
+import FormControl from "../../../base/form-control/FormControl.vue";
 import axios from "axios";
-import DialogWarning from "../../base/dialog/DialogWarning.vue";
-import DialogUpdate from "../../base/dialog/DialogUpdate";
-import MsToast from "../../base/toast/MsToast.vue";
-import { BASE_URL, DEPARTMENT_URL } from "../../../constans/constans";
-import { ERRORS, EMPLOYEE } from "../../../constans/resource";
-import { EMPLOYEE_DETAIL, TOOLTIP, MS_BUTTON } from "@/constans/layoutResource";
-import { SAVE } from "@/constans/enums";
+import DialogWarning from "../../../base/dialog/DialogWarning.vue";
+import DialogUpdate from "../../../base/dialog/DialogUpdate";
+import MsToast from "../../../base/toast/MsToast.vue";
+import { BASE_URL, DEPARTMENT_URL } from "../../../../constans/constans";
+import {
+    ERRORS,
+    EMPLOYEE,
+    MAXLENGHT_INPUT,
+} from "../../../../constans/resource";
+import {
+    EMPLOYEE_DETAIL,
+    TOOLTIP,
+    MS_BUTTON,
+} from "../../../../constans/layoutResource";
+import { SAVE } from "../../../../constans/enums";
 
 export default {
     components: {
@@ -445,6 +490,8 @@ export default {
         return {
             // Thông tin nhân viên
             employee: {},
+            // Thông tin nhân viên khi mở form
+            defaultEmployee: {},
             // Trạng thái validate nhân viên
             validate: {},
             // Text cảnh báo nhân viên
@@ -470,7 +517,7 @@ export default {
             },
 
             // Tabfocus
-            tabForcus: false,
+            tabForcus: {},
             //error text
             errorText: "",
             employeeDetail: EMPLOYEE_DETAIL,
@@ -478,6 +525,7 @@ export default {
             formName: EMPLOYEE,
             buttonSrc: MS_BUTTON,
             saveSrc: SAVE,
+            maxlenght: MAXLENGHT_INPUT,
         };
     },
     props: [
@@ -496,13 +544,13 @@ export default {
         // gán giá trị cho employee khi có item sửa
         if (this.employeeEditItem) {
             this.employee = { ...this.employeeEditItem };
+            this.defaultEmployee = { ...this.employeeEditItem };
         }
 
         // Lẫy mã mới
         if (!this.edit) {
             this.getNewEmployeeCode();
         }
-
         // tạo sự kiện phím tắt
         window.addEventListener("keyup", this.listenerKeyup);
     },
@@ -526,12 +574,12 @@ export default {
                         if (!this.edit) {
                             // F8
                             if (e.keyCode == 119) {
-                                this.addEmployee(1);
+                                this.addEmployee(0);
                             }
                         }
                         // F9
-                        if (e.key == 120) {
-                            this.addEmployee(0);
+                        if (e.keyCode == 120) {
+                            this.addEmployee(1);
                         }
                     }
                 } catch (err) {
@@ -614,54 +662,12 @@ export default {
                 let isValidate = true;
                 this.validate = {};
                 this.errors = {};
-                if (!this.employee.EmployeeCode) {
-                    this.validate.code = true;
-                    this.errors.code = ERRORS.EMPLOYEECODE;
-                    isValidate = false;
-                }
-                if (!this.employee.EmployeeName) {
-                    this.validate.name = true;
-                    this.errors.name = ERRORS.EMPLOYEENAME;
-                    isValidate = false;
-                }
-                if (!this.employee.DepartmentID) {
-                    this.validate.DepartmentId = true;
-                    this.errors.DepartmentId = ERRORS.DEPARTMENTID;
-                    isValidate = false;
-                }
-                if (this.validateTime(this.employee.DateofBirth)) {
-                    this.validate.DateOfBirth = true;
-                    this.errors.DateOfBirth = ERRORS.DATEOFBIRTH;
-                    isValidate = false;
-                }
-
-                if (this.employee.IdentityNumber) {
-                    if (!this.isNumber(this.employee.IdentityNumber)) {
-                        this.validate.IdentityNumber = true;
-                        this.errors.IdentityNumber = ERRORS.IDENTITYNUMBER;
-                        isValidate = false;
-                    }
-                }
-                if (this.employee.IdentityDate) {
-                    if (this.validateTime(this.employee.IdentityDate)) {
-                        this.validate.IdentityDate = true;
-                        this.errors.IdentityDate = ERRORS.INDENTITYDATE;
-                        isValidate = false;
-                    }
-                }
-
-                if (this.employee.PhoneNumber) {
-                    if (!this.isNumber(this.employee.PhoneNumber)) {
-                        this.validate.PhoneNumber = true;
-                        this.errors.PhoneNumber = ERRORS.PHONENUMBER;
-                        isValidate = false;
-                    }
-                }
-
-                if (this.employee.TelephoneNumber) {
-                    if (!this.isNumber(this.employee.TelephoneNumber)) {
-                        this.validate.TelephoneNumber = true;
-                        this.errors.TelephoneNumber = ERRORS.TELEPHONENUMBER;
+                this.tabForcus = {};
+                if (this.employee.BankNumber) {
+                    if (!this.isNumber(this.employee.BankNumber)) {
+                        this.validate.BankNumber = true;
+                        this.errors.BankNumber = ERRORS.BANKNUMBER;
+                        this.tabForcus.BankNumber = true;
                         isValidate = false;
                     }
                 }
@@ -669,18 +675,68 @@ export default {
                     if (!this.isEmail(this.employee.Email)) {
                         this.validate.Email = true;
                         this.errors.Email = ERRORS.EMAIL;
+                        this.tabForcus.email = true;
                         isValidate = false;
                     }
                 }
-                if (this.employee.BankNumber) {
-                    if (!this.isNumber(this.employee.BankNumber)) {
-                        this.validate.BankNumber = true;
-                        this.errors.BankNumber = ERRORS.BANKNUMBER;
+                if (this.employee.TelephoneNumber) {
+                    if (!this.isNumber(this.employee.TelephoneNumber)) {
+                        this.validate.TelephoneNumber = true;
+                        this.errors.TelephoneNumber = ERRORS.TELEPHONENUMBER;
+                        this.tabForcus.TelephoneNumber = true;
                         isValidate = false;
                     }
+                }
+                if (this.employee.PhoneNumber) {
+                    if (!this.isNumber(this.employee.PhoneNumber)) {
+                        this.validate.PhoneNumber = true;
+                        this.errors.PhoneNumber = ERRORS.PHONENUMBER;
+                        this.tabForcus.PhoneNumber = true;
+                        isValidate = false;
+                    }
+                }
+                if (this.employee.IdentityDate) {
+                    if (this.validateTime(this.employee.IdentityDate)) {
+                        this.validate.IdentityDate = true;
+                        this.errors.IdentityDate = ERRORS.INDENTITYDATE;
+                        this.$refs.identityDate.focus();
+                        isValidate = false;
+                    }
+                }
+                if (this.employee.IdentityNumber) {
+                    if (!this.isNumber(this.employee.IdentityNumber)) {
+                        this.validate.IdentityNumber = true;
+                        this.errors.IdentityNumber = ERRORS.IDENTITYNUMBER;
+                        this.tabForcus.IdentityNumber = true;
+                        isValidate = false;
+                    }
+                }
+                if (this.validateTime(this.employee.DateofBirth)) {
+                    this.validate.DateOfBirth = true;
+                    this.errors.DateOfBirth = ERRORS.DATEOFBIRTH;
+                    this.$refs.dateOfBirth.focus();
+                    isValidate = false;
+                }
+                if (!this.employee.DepartmentID) {
+                    this.validate.DepartmentId = true;
+                    this.errors.DepartmentId = ERRORS.DEPARTMENTID;
+                    // this.tabForcus.DepartmentId = true;
+                    this.$refs.department.focusInput();
+                    isValidate = false;
+                }
+                if (!this.employee.EmployeeName) {
+                    this.validate.name = true;
+                    this.errors.name = ERRORS.EMPLOYEENAME;
+                    this.tabForcus.employeeName = true;
+                    isValidate = false;
+                }
+                if (!this.employee.EmployeeCode) {
+                    this.validate.code = true;
+                    this.errors.code = ERRORS.EMPLOYEECODE;
+                    this.tabForcus.employeeCode = true;
+                    isValidate = false;
                 }
                 if (isValidate == false) {
-                    this.tabForcus = true;
                     return false;
                 } else {
                     return true;
@@ -833,7 +889,7 @@ export default {
          */
         validateFormCode() {
             try {
-                this.tabForcus = false;
+                this.tabForcus.employeeCode = false;
                 this.validate.code = false;
                 this.errors.code = "";
                 if (!this.employee.EmployeeCode) {
@@ -949,11 +1005,14 @@ export default {
          */
         async addEmployee(value) {
             try {
-                this.validateForm();
                 if (this.validateForm()) {
                     if (this.edit) {
                         try {
-                            this.coDialogUpdate();
+                            if (this.compareEmployee()) {
+                                this.coDialogUpdate();
+                            } else {
+                                this.isEditEmployee();
+                            }
                         } catch (error) {
                             console.log(error);
                         }
@@ -1019,7 +1078,10 @@ export default {
             try {
                 axios
                     .get(`${BASE_URL}/newEmployeeCode`)
-                    .then(res => (this.employee.EmployeeCode = res.data))
+                    .then(res => {
+                        this.employee.EmployeeCode = res.data;
+                        this.defaultEmployee.EmployeeCode = res.data;
+                    })
                     .catch(e => console.log(e));
             } catch (error) {
                 console.log(error);
@@ -1033,10 +1095,24 @@ export default {
         isWarningDialog() {
             try {
                 this.isWarning = !this.isWarning;
-                this.tabForcus = true;
+                this.tabForcus.employeeCode = true;
             } catch (err) {
                 console.log(err);
             }
+        },
+
+        /**
+         * So sánh thay đổi của employee
+         * author: NHAnh (12/12/2022)
+         */
+        compareEmployee() {
+            if (
+                JSON.stringify(this.employee) !=
+                JSON.stringify(this.defaultEmployee)
+            ) {
+                return true;
+            }
+            return false;
         },
 
         /**
@@ -1046,7 +1122,11 @@ export default {
         closePopup(value) {
             try {
                 if (value == 1) {
-                    this.dialogEdit = !this.dialogEdit;
+                    if (this.compareEmployee()) {
+                        this.dialogEdit = !this.dialogEdit;
+                    } else {
+                        this.$emit("onClose");
+                    }
                 } else {
                     this.$emit("onClose");
                 }
@@ -1061,7 +1141,7 @@ export default {
          */
         tabOrder() {
             try {
-                this.tabForcus = true;
+                this.tabForcus.employeeCode = true;
             } catch (err) {
                 console.log(err);
             }
@@ -1100,11 +1180,14 @@ export default {
 }
 .m-popup__title {
     width: 100%;
-    padding: 20px 32px;
+    padding: 10px 24px;
     padding-right: 12px;
     position: relative;
     overflow: hidden;
     border-radius: 5px 5px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .m-popup__title-header {
     display: flex;
@@ -1131,14 +1214,14 @@ export default {
 }
 .m-popup__close {
     display: flex;
-    padding: 12px;
+    padding: 12px 6px;
 }
 /* End Header */
 
 /* Popup content */
 .m-popup__content-main {
     overflow: auto;
-    padding: 0 32px 12px;
+    padding: 0 24px 12px;
 }
 .m-popup__content-main label {
     font-size: 13px !important;
@@ -1229,7 +1312,6 @@ export default {
 }
 .content-employee__contact {
     width: 100%;
-    border-bottom: 1px solid #e6e6e6;
 }
 .telephone-number {
     width: calc(25% - 10px);
@@ -1243,7 +1325,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 12px;
+    padding: 12px 24px;
+    border-top: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
 }
 .m-popup__footer-left {
     display: flex;

@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-import DepositsContent from "../content-page/deposits/DepositsContent.vue";
+import DepositsContent from "./content-page/deposits/DepositsContent.vue";
 export default {
     components: { DepositsContent },
 };

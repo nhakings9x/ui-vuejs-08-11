@@ -55,3 +55,19 @@ export const LIST_PAGGING = [
         title: 100,
     },
 ];
+
+// Độ dài tối đa của các ô input
+export const MAXLENGHT_INPUT = {
+    CODE: 20,
+    NAME: 100,
+    ID_NUMBER: 25,
+    ID_PLACE: 255,
+    JOB_NAME: 255,
+    ADDRESS: 255,
+    PHONE: 50,
+    EMAIL: 100,
+    BANK_NUMBER: 25,
+    BANK_BRANCH: 255,
+    BANK_NAME: 255,
+    SEARCH: 100,
+};

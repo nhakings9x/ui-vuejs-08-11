@@ -7,12 +7,14 @@
         <employee-main
             :listEmployee="listEmployee"
             :reloadList="getListPageOne"
+            :reloadListPresent="getList"
             :hadData="hadData"
             :errorTextApi="errorTextApi"
             @searchValue="searchValue"
             @reloadData="getListPageOne"
             @openToastAdd="closeOpenToast"
         ></employee-main>
+        <div>{{ errorTextApi }}</div>
         <employee-pagging
             :totalRecord="totalRecord"
             :totalPage="totalPage"
@@ -36,9 +38,9 @@ import MsLoading from "../base/loading/MsLoading.vue";
 import MsToast from "../base/toast/MsToast.vue";
 import { BASE_URL } from "@/constans/constans";
 import { ERRORS_API } from "@/constans/resource";
-import EmployeeHeader from "../content-page/employee/EmployeeHeader.vue";
-import EmployeeMain from "../content-page/employee/EmployeeMain.vue";
-import EmployeePagging from "../content-page/employee/EmployeePagging.vue";
+import EmployeeHeader from "./content-page/employee/EmployeeHeader.vue";
+import EmployeeMain from "./content-page/employee/EmployeeMain.vue";
+import EmployeePagging from "./content-page/employee/EmployeePagging.vue";
 
 export default {
     components: {
@@ -105,37 +107,39 @@ export default {
                 this.isLoading = true;
                 this.hadData = false;
                 this.errorTextApi = "";
-                const res = await axios.get(
-                    `${BASE_URL}/filter?${this.search}&limit=${this.numberItemData}&offset=${this.pageNumberData}`
-                );
-                then(res => {
-                    // Lấy số bản ghi
-                    this.totalRecord = res.data.TotalCount;
+                const res = await axios
+                    .get(
+                        `${BASE_URL}/filter?${this.search}&limit=${this.numberItemData}&offset=${this.pageNumberData}`
+                    )
+                    .then(res => {
+                        // Lấy số bản ghi
+                        this.totalRecord = res.data.TotalCount;
 
-                    if (this.totalRecord == 0) {
-                        this.hadData = true;
-                        this.errorTextApi = ERRORS_API.NOTFOUND404;
-                    }
-                    // Gán dữ liệu vào list
-                    this.listEmployee = res.data.Data;
-                    // Thêm trường checked cho từng ô dữ liệu
+                        if (this.totalRecord == 0) {
+                            this.hadData = true;
+                            this.errorTextApi = ERRORS_API.NOTFOUND404;
+                        }
+                        // Gán dữ liệu vào list
+                        this.listEmployee = res.data.Data;
+                        // Thêm trường checked cho từng ô dữ liệu
 
-                    this.listEmployee.map(e => (e.isChecked = false));
-                    // Thêm giá trị đóng mở thanh chức năng
+                        this.listEmployee.map(e => (e.isChecked = false));
+                        // Thêm giá trị đóng mở thanh chức năng
 
-                    this.listEmployee.map(e => (e.closeOpenDelete = false));
+                        this.listEmployee.map(e => (e.closeOpenDelete = false));
 
-                    // Lấy số trang
-                    this.totalPage = res.data.TotalPage;
-                    // Tắt Loading
+                        // Lấy số trang
+                        this.totalPage = res.data.TotalPage;
 
-                    this.isLoading = false;
-                }).catch(e => {
-                    console.log(e);
-                    setTimeout(() => {
+                        // Tắt Loading
                         this.isLoading = false;
-                    }, 2000);
-                });
+                    })
+                    .catch(e => {
+                        console.log(e);
+                        setTimeout(() => {
+                            this.isLoading = false;
+                        }, 2000);
+                    });
             } catch (error) {
                 this.isLoading = false;
                 console.log(error);
@@ -278,6 +282,7 @@ export default {
 }
 .m-main__table-body {
     /* padding-right: 8px; */
+    min-height: calc(40% - 60px);
     max-height: calc(100% - 60px);
     overflow: auto;
 }

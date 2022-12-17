@@ -2,6 +2,7 @@
     <button
         :class="['m-btn', btnExtra ? 'm-btn-extra' : '']"
         :tabindex="tabindex"
+        :title="titleBtn"
     >
         {{ btnText }}
     </button>
@@ -22,6 +23,9 @@ export default {
         // Tabindex ô button
         tabindex: {
             type: Number,
+        },
+        titleBtn: {
+            type: String,
         },
     },
 };
